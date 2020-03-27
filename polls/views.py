@@ -190,8 +190,12 @@ def login_handmade(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
+                person = get_object_or_404(Person, user=user)
                 # Redirect to a success page.
-                return render(request,'polls/person.html')
+                if  person.admin:
+                    return render(request, 'polls/person.html')
+                else:
+                    return render(request,'polls/startUser.html')
             else:
                 # Return a 'disabled account' error message
                 #er.append("Twoje konto jest zablokowane")
