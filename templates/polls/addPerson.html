@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>{{ person.fitstName }} {{ person.LastName }}</h1>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="{% url 'polls:addPerson' %}" method="post">
+{% csrf_token %}
+    <input type="text" id="id" name="id" style="display: none" ><br>
+    <label for="fname">Imie:</label><br>
+    <input type="text" id="fname" name="fname" ><br>
+    <label for="lname">Nazwisko</label><br>
+    <input type="text" id="lname" name="lname" ><br>
+    <label for="login">Login</label><br>
+    <input type="text" id="login" name="login" ><br>
+    <label for="password">Password</label><br>
+    <input type="password" id="password" name="password" ><br>
+    <label for="email">Password</label><br>
+    <input type="email" id="email" name="email" ><br>
+    <label for="position">Stanowisko</label><br>
+    <input type="text" id="position" name="position" v><br>
+    <label for="czyA">Admin</label>
+    <input type="checkbox" id="czyA" name="czyA" ><br><br>
+    <input type="submit" value="Add">
+</form>
+
+</body>
+</html>

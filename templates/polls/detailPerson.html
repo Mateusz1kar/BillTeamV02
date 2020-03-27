@@ -1,0 +1,32 @@
+{% extends "polls/base.html" %}
+{#  load staticfiles %}#}
+{% block body_block %}
+<h1>{{ person.user.first_name}} {{person.user.last_name }}</h1>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="{% url 'polls:personFormExecute' %}" method="post">
+{% csrf_token %}
+    <input type="text" id="id" name="id" style="display: none" value="{{ person.id }}"><br>
+    <label for="fname">Imie:</label><br>
+    <input type="text" id="fname" name="fname" value="{{ person.user.first_name }}"><br>
+    <label for="lname">Nazwisko</label><br>
+    <input type="text" id="lname" name="lname" value="{{  person.user.last_name }}"><br>
+    <label for="login">Login</label><br>
+    <input type="text" id="login" name="login" value="{{ person.user.username}}"><br>
+    <label for="password">Password</label><br>
+    <input type="password" id="password" name="password" value=""><br>
+    <label for="position">Stanowisko</label><br>
+    <input type="text" id="position" name="position" value="{{ person.position }}"><br>
+    <label for="czyA">Admin</label>
+    <input type="checkbox" id="czyA" name="czyA" {% if person.admin %} checked {% endif %}><br><br>
+    <input type="submit" value="Update">
+</form>
+
+
+<form action="{% url 'polls:personDelee' %}" method="post">
+{% csrf_token %}
+     <input type="text" id="id" name="id" style="display: none" value="{{ person.id }}">
+    <input type="submit" value="Delete">
+</form>
+{% endblock %}

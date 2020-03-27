@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<table>
+  <tr>
+      <th>Id</th>
+      <th>Nazwa</th>
+      <th>Opis</th>
+      <th>Project owner</th>
+      <th>Status</th>
+  </tr>
+
+{% if person %}
+    <tr>
+    {% for p in project %}
+
+         <td>{{ p.name }}</td>
+         <td>{{ p.description }}</td>
+         <td>{{ p.owner }}</td>
+         <td>{{ p.state }}</td>
+         </tr>
+    {% endfor %}
+
+{% else %}
+    <p>No polls are available.</p>
+{% endif %}
+</table>
+
+<a href="{% url 'polls:addPerson' %}" ><button>Add</button></a>
+
+</body>
+</html>
