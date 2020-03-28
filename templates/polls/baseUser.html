@@ -13,7 +13,7 @@
 {# Django Home Link / Admin Link / Register Link#}
           <li><a class="navbar-brand" href="{% url 'polls:index' %}">DJANGO</a></li>
 
-          <li><a class="navbar-link" href="{% url 'polls:personList' %}">PersonList</a></li>
+          <li><a class="navbar-link" href="{% url 'polls:notifikationSend' %}">NotifikationSend</a></li>
           {# Some logic on what to display for last item#}
           {% if user.is_authenticated %}
             <li><a href="{% url 'polls:logout' %}">Logout</a></li>

@@ -17,7 +17,7 @@ from django.urls import reverse
 from django.contrib.auth.forms import UserCreationForm
 from django.views.generic.edit import CreateView
 from django.http import JsonResponse
-from .forms import SignUpForm, UserProfileInfoForm
+from .forms import SignUpForm, UserProfileInfoForm , NotificationAdd
 from django.contrib.auth import authenticate
 
 # Create your views here.
@@ -213,6 +213,27 @@ def logout_view(request):
     return HttpResponseRedirect(reverse('polls:login'))
 
 
+def NotifikationForm(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('polls:login'))
+    else:
+        registered = False
+        if request.method == 'POST':
+            noti_form= NotificationAdd(data=request.POST)
+            if noti_form.is_valid():
+
+                notifikation = noti_form.save(commit=False)
+                notifikation.who = request.user
+               # notifikation.projectOwner = get_object_or_404(Project,idNotification=noti_form.data.projectOwner)
+                notifikation.save()
+                registered = True
+            else:
+                print(noti_form.errors)
+        else:
+            noti_form = NotificationAdd()
+        return render(request,'polls/notifikation.html',
+                              {'noti_form':noti_form,
+                               'registered':registered})
 
 
 

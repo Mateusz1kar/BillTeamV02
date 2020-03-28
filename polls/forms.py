@@ -5,7 +5,7 @@ from django.contrib.auth.hashers import make_password
 from polls import models
 from django.contrib.auth.models import User
 
-from polls.models import Person as Person
+from polls.models import Person ,Notification
 
 
 class SignUpForm(UserCreationForm):
@@ -24,5 +24,27 @@ class UserProfileInfoForm(forms.ModelForm):
     class Meta():
         model = Person
         fields = ('position', 'admin')
+
+
+class NotificationAdd(forms.ModelForm):
+    what = forms.CharField(max_length=30, required=True, help_text='Optional.')
+    #projectOwner = forms.CharField(max_length=30, required=False, help_text='Optional.')
+    projectOwner = forms.NumberInput()
+    start_date = forms.DateTimeField(input_formats=['%Y-%m-%d %H:%M:%S', '%Y-%m-%d %H:%M',])
+    edn_date = forms.DateTimeField()
+
+    class Meta():
+        model = Notification
+        fields = ('what','projectOwner','start_date','edn_date')
+
+
+# class NotificationProjectId(forms.ModelForm):
+#
+#     projectOwner = forms.NumberInput(required=True)
+#
+#     class Meta():
+#         #model = Notification
+#         fields = ('projectOwner')
+
 
 

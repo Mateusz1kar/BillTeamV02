@@ -28,6 +28,7 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
 
     path('Register/', views.register, name='register'),
+    path('Notifikation/', views.NotifikationForm, name='notifikationSend'),
 ]
 
 

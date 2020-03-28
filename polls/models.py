@@ -32,7 +32,6 @@ class Notification(models.Model):
     who = models.ForeignKey(User, on_delete=models.SET_NULL,null=True)
     what = models.CharField(max_length=100)
     projectOwner = models.ForeignKey(Project,on_delete=models.CASCADE)
-
     start_date = models.DateTimeField(
         default=timezone.now)
     edn_date = models.DateTimeField(
