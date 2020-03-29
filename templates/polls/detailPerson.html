@@ -29,4 +29,7 @@
      <input type="text" id="id" name="id" style="display: none" value="{{ person.id }}">
     <input type="submit" value="Delete">
 </form>
+
+    <a href="{% url 'polls:notifikationUser' person.id  %}">Notifikation</a>
+
 {% endblock %}

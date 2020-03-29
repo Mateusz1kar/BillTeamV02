@@ -1,0 +1,34 @@
+{% extends "polls/base.html" %}
+{#  load staticfiles %}#}
+{% block body_block %}
+  <div class="container">
+
+   <table>
+  <tr>
+      <th>Id</th>
+      <th>Who</th>
+      <th>What</th>
+      <th>Project</th>
+      <th>Start_date</th>
+      <th>Edn_date</th>
+      <th>Delet</th>
+  </tr>
+
+{% if notifikation.count > 0  %}
+    <tr>
+    {% for n in notifikation %}
+         <td>{{ n.idNotification }}</td>
+         <td>{{ n.who }}</td>
+         <td>{{ n.what }}</td>
+         <td>{{ n.projectOwner }}</td>
+         <td>{{ n.start_date }}</td>
+        <td>{{ n.Edn_date }}</td>
+        <td><a href="{% url 'polls:detailPerson' n.idNotification %}"><button value="Wyswietl">Delet</button> </a></td></tr>
+    {% endfor %}
+
+{% else %}
+    <p>No polls are available.</p>
+{% endif %}
+</table>
+  </div>
+{% endblock %}

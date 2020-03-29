@@ -236,6 +236,13 @@ def NotifikationForm(request):
                                'registered':registered})
 
 
+class NotifikationUser(generic.ListView):
+    template_name = 'polls/notifikationUser.html'
+    context_object_name = 'notifikation'
+
+    def get_queryset(self):
+        person= get_object_or_404(Person,id=self.kwargs['pk'])
+        return Notification.objects.filter(who=person.user)
 
 
 
