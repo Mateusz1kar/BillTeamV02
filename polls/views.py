@@ -236,18 +236,36 @@ def NotifikationForm(request):
                                'registered':registered})
 
 
-class NotifikationUser(generic.ListView):
-    template_name = 'polls/notifikationUser.html'
-    context_object_name = 'notifikation'
+# class NotifikationUser(generic.ListView):
+#     template_name = 'polls/notifikationUser.html'
+#     context_object_name = 'notifikation'
+#
+#     def get_queryset(self):
+#         person= get_object_or_404(Person,id=)
+#         return Notification.objects.filter(who=person.user)
 
-    def get_queryset(self):
-        person= get_object_or_404(Person,id=self.kwargs['pk'])
-        return Notification.objects.filter(who=person.user)
+def NotifikationUser(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('polls:login'))
+    else:
+        registered = False
+        if request.method == 'POST':
+            return render(request, 'polls/notifikationUser.html',
+                          {'notifikation': Notification.objects.filter(who=request.POST['id'])})
 
 
 
+def notifikationFormDeleteExecute(request):
+    try:
+        notifikation = get_object_or_404(Notification, idNotification=request.POST['id'])
 
-
-
+    except (KeyError, Notification):
+        # Redisplay the question voting form.
+        return render(request, 'polls/notifikationUser.html/'+request.user)
+    else:
+        person = notifikation.who
+        notifikation.delete()
+        return render(request, 'polls/notifikationUser.html',
+                      {'notifikation': Notification.objects.filter(who=person.id)})
 
 

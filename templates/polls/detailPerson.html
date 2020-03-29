@@ -29,7 +29,11 @@
      <input type="text" id="id" name="id" style="display: none" value="{{ person.id }}">
     <input type="submit" value="Delete">
 </form>
+    <form action="{% url 'polls:notifikationUser' %}" method="post">
+        {% csrf_token %}
+             <input type="number" id="id" name="id" style="display: none" value="{{ person.id }}">
+            <input type="submit" value="Notifikation">
+        </form>
 
-    <a href="{% url 'polls:notifikationUser' person.id  %}">Notifikation</a>
 
 {% endblock %}

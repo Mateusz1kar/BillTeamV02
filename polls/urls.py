@@ -29,7 +29,8 @@ urlpatterns = [
 
     path('Register/', views.register, name='register'),
     path('Notifikation/', views.NotifikationForm, name='notifikationSend'),
-    path('NotifikationUser/<int:pk>/', views.NotifikationUser.as_view(), name='notifikationUser'),
+    path('NotifikationUser/', views.NotifikationUser, name='notifikationUser'),
+    path('NotifikationFormDeleteExecute/', views.notifikationFormDeleteExecute, name='notifikationDelee'),
 ]
 
 

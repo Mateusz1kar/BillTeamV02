@@ -23,7 +23,12 @@
          <td>{{ n.projectOwner }}</td>
          <td>{{ n.start_date }}</td>
         <td>{{ n.Edn_date }}</td>
-        <td><a href="{% url 'polls:detailPerson' n.idNotification %}"><button value="Wyswietl">Delet</button> </a></td></tr>
+        <td>
+            <form action="{% url 'polls:notifikationDelee' %}" method="post">
+        {% csrf_token %}
+             <input type="number" id="id" name="id" style="display: none" value="{{ n.idNotification }}">
+            <input type="submit" value="Delete">
+        </form></td></tr>
     {% endfor %}
 
 {% else %}
