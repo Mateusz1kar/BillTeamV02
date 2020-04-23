@@ -4,6 +4,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.hashers import make_password
 from polls import models
 from django.contrib.auth.models import User
+from datetime import datetime
+from django.utils.dateparse import parse_datetime
 
 from polls.models import Person ,Notification
 
@@ -17,6 +19,11 @@ class SignUpForm(UserCreationForm):
         model = User
         fields = ('username', 'email', 'password1', 'password2', 'last_name','first_name','email')
 
+class DateInput(forms.DateInput):
+    input_type = 'date'
+
+class TimeInput(forms.TimeInput):
+    input_type = 'time'
 
 class UserProfileInfoForm(forms.ModelForm):
     position = forms.CharField(max_length=30, required=False, help_text='Optional.')
@@ -27,15 +34,19 @@ class UserProfileInfoForm(forms.ModelForm):
 
 
 class NotificationAdd(forms.ModelForm):
-    what = forms.CharField(max_length=30, required=True, help_text='Optional.')
+    what = forms.CharField(max_length=30, required=True)
     #projectOwner = forms.CharField(max_length=30, required=False, help_text='Optional.')
+
     projectOwner = forms.NumberInput()
-    start_date = forms.DateTimeField(input_formats=['%Y-%m-%d %H:%M:%S', '%Y-%m-%d %H:%M',])
-    edn_date = forms.DateTimeField()
+
+    start_date = forms.DateTimeField(input_formats=['%d/%m/%Y %H:%M'])
+
+    end_date = forms.DateTimeField(input_formats=['%d/%m/%Y %H:%M'])
+
 
     class Meta():
         model = Notification
-        fields = ('what','projectOwner','start_date','edn_date')
+        fields = ('what','projectOwner','start_date','end_date')
 
 
 # class NotificationProjectId(forms.ModelForm):
