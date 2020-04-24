@@ -1,0 +1,2 @@
+On linux based systems: source ./venv/bin/activate
+On windows: /venv/bin/activate
