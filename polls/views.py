@@ -243,9 +243,16 @@ def NotifikationForm(request):
                 print(noti_form.errors)
         else:
             noti_form = NotificationAdd()
+        czyAdmin = get_object_or_404(Person, user=request.user).admin
+        if(czyAdmin ):
+            return render(request, 'polls/NotifikationAdmin',
+                          {'noti_form': noti_form,
+                           'registered': registered,
+                           'czyAdmin': czyAdmin})
         return render(request,'polls/notifikation.html',
                               {'noti_form':noti_form,
-                               'registered':registered})
+                               'registered':registered,
+                               'czyAdmin':czyAdmin})
 
 
 # class NotifikationUser(generic.ListView):
@@ -261,6 +268,7 @@ def NotifikationUser(request):
         return HttpResponseRedirect(reverse('polls:login'))
     else:
         registered = False
+
         if request.method == 'POST':
             return render(request, 'polls/notifikationUser.html',
                           {'notifikation': Notification.objects.filter(who=request.POST['id'])})
