@@ -31,7 +31,7 @@ class NotificationAdd(forms.ModelForm):
     #projectOwner = forms.CharField(max_length=30, required=False, help_text='Optional.')
     projectOwner = forms.NumberInput()
     start_date = forms.DateTimeField(input_formats=['%Y-%m-%d %H:%M:%S', '%Y-%m-%d %H:%M',])
-    edn_date = forms.DateTimeField()
+    edn_date = forms.DateTimeField(input_formats=['%Y-%m-%d %H:%M:%S', '%Y-%m-%d %H:%M',])
 
     class Meta():
         model = Notification
