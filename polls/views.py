@@ -27,7 +27,10 @@ class PersonList(generic.ListView):
     context_object_name = 'person'
 
     def get_queryset(self):
-        return Person.objects.order_by('user')
+        if not self.request.user.is_authenticated:
+            return HttpResponseRedirect(reverse('polls:login'))
+        else:
+            return Person.objects.order_by('user')
 
 
 
@@ -41,7 +44,10 @@ class  DetailPerson(generic.DetailView):
     context_object_name = 'person'
 
     def get_queryset(self):
-        return Person.objects.order_by('idPerson')
+        if not self.request.user.is_authenticated:
+            return HttpResponseRedirect(reverse('polls:login'))
+        else:
+            return Person.objects.order_by('idPerson')
     #person = Person.objects.filter(idPerson=pk).first()
 
 
@@ -108,30 +114,36 @@ def personFormDeleteExecute(request):
         return HttpResponseRedirect(reverse('polls:personList'))
 
 def addPersonFormExecute(request):
-    #pom = False
-    try:
-        if (request.POST['czyA']):
-             pom = True
-    except:
-        pom = False
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('polls:login'))
+    else:
+        #pom = False
+        try:
+            if (request.POST['czyA']):
+                 pom = True
+        except:
+            pom = False
 
-    person2 = Person()
-    #person = Person(firstName=request.POST['fname'], lastName=request.POST['lname'], login = request.POST['login'], password=request.POST['password'], position=request.POST['position'], admin= pom)
+        person2 = Person()
+        #person = Person(firstName=request.POST['fname'], lastName=request.POST['lname'], login = request.POST['login'], password=request.POST['password'], position=request.POST['position'], admin= pom)
 
-    person2.firstName = request.POST['fname']
-    person2.lastName = request.POST['lname']
-    person2.login = request.POST['login']
-    person2.password = request.POST['password']
-    person2.position = request.POST['position']
-    person2.admin = pom
+        person2.firstName = request.POST['fname']
+        person2.lastName = request.POST['lname']
+        person2.login = request.POST['login']
+        person2.password = request.POST['password']
+        person2.position = request.POST['position']
+        person2.admin = pom
 
-    person2.save()
-    return HttpResponseRedirect(reverse('polls:personList'))
+        person2.save()
+        return HttpResponseRedirect(reverse('polls:personList'))
 
 
 def detailProject(request, idProject):
-    response = "You're looking at the results of question %s."
-    return HttpResponse(response % idProject)
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('polls:login'))
+    else:
+        response = "You're looking at the results of question %s."
+        return HttpResponse(response % idProject)
 
 def detailNotification(request, idNotification):
     return HttpResponse("You're voting on question %s." % idNotification)
@@ -193,7 +205,7 @@ def login_handmade(request):
                 person = get_object_or_404(Person, user=user)
                 # Redirect to a success page.
                 if  person.admin:
-                    return render(request, 'polls/person.html')
+                    return render(request, 'polls/StartAdmin.html')
                 else:
                     return render(request,'polls/startUser.html')
             else:
@@ -231,9 +243,16 @@ def NotifikationForm(request):
                 print(noti_form.errors)
         else:
             noti_form = NotificationAdd()
+        czyAdmin = get_object_or_404(Person, user=request.user).admin
+        if(czyAdmin ):
+            return render(request, 'polls/NotifikationAdmin',
+                          {'noti_form': noti_form,
+                           'registered': registered,
+                           'czyAdmin': czyAdmin})
         return render(request,'polls/notifikation.html',
                               {'noti_form':noti_form,
-                               'registered':registered})
+                               'registered':registered,
+                               'czyAdmin':czyAdmin})
 
 
 # class NotifikationUser(generic.ListView):
@@ -249,6 +268,7 @@ def NotifikationUser(request):
         return HttpResponseRedirect(reverse('polls:login'))
     else:
         registered = False
+
         if request.method == 'POST':
             return render(request, 'polls/notifikationUser.html',
                           {'notifikation': Notification.objects.filter(who=request.POST['id'])})
@@ -268,4 +288,14 @@ def notifikationFormDeleteExecute(request):
         return render(request, 'polls/notifikationUser.html',
                       {'notifikation': Notification.objects.filter(who=person.id)})
 
+
+def SartPage(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('polls:login'))
+    else:
+        person = get_object_or_404(Person, user=request.user)
+        if( person.admin) :
+            return  render(request,'polls/StartAdmin.html')
+        else:
+            return  render(request,'polls/startUser.html')
 
