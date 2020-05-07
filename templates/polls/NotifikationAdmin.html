@@ -1,6 +1,18 @@
 {% extends "polls/base.html" %}
 {#  load staticfiles %}#}
 {% block body_block %}
+<script>
+    $(function (){
+        $("#id_start_date").datetimepicker({
+            format: 'd/m/Y H:i',
+            });
+           });
+        $(function (){
+        $("#id_end_date").datetimepicker({
+            format: 'd/m/Y H:i',
+            });
+           });
+</script>
   <div class="container">
     <div class="jumbotron">
       {% if registered %}

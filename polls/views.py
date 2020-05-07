@@ -245,7 +245,7 @@ def NotifikationForm(request):
             noti_form = NotificationAdd()
         czyAdmin = get_object_or_404(Person, user=request.user).admin
         if(czyAdmin ):
-            return render(request, 'polls/NotifikationAdmin',
+            return render(request, 'polls/NotifikationAdmin.html',
                           {'noti_form': noti_form,
                            'registered': registered,
                            'czyAdmin': czyAdmin})
