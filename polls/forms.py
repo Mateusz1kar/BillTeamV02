@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from datetime import datetime
 from django.utils.dateparse import parse_datetime
 
-from polls.models import Person ,Notification
+from polls.models import Person ,Notification, Project
 
 
 class SignUpForm(UserCreationForm):
@@ -43,17 +43,32 @@ class NotificationAdd(forms.ModelForm):
     end_date = forms.DateTimeField(input_formats=['%Y-%m-%d %H:%M:%S', '%Y-%m-%d %H:%M',])
 
 
-    start_date = forms.DateTimeField(input_formats=['%d/%m/%Y %H:%M'])
 
-    end_date = forms.DateTimeField(input_formats=['%d/%m/%Y %H:%M'])
+    #start_date = forms.DateTimeField(input_formats=['%d/%m/%Y %H:%M'])
+
+    #end_date = forms.DateTimeField(input_formats=['%d/%m/%Y %H:%M'])
 
 
 
     class Meta():
         model = Notification
         fields = ('what','projectOwner','start_date','end_date')
+        labels = {'projectOwner': 'Project name'}
 
+class projektadd(forms.ModelForm):
 
+    name = forms.CharField(max_length=50, required=True)
+    description = forms.CharField(max_length=50, required=True)
+    owner = forms.NumberInput()
+    state = forms.CharField(max_length=50, required=True)
+
+    class Meta():
+        model = Project
+        fields = ('name','description','owner','state')
+        labels = {'name': 'Project Name',
+                  'description': 'Description',
+                  'owner': 'Owner',
+                  'state': 'Actual state'}
 # class NotificationProjectId(forms.ModelForm):
 #
 #     projectOwner = forms.NumberInput(required=True)

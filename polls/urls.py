@@ -31,6 +31,8 @@ urlpatterns = [
     path('Notifikation/', views.NotifikationForm, name='notifikationSend'),
     path('NotifikationUser/', views.NotifikationUser, name='notifikationUser'),
     path('NotifikationFormDeleteExecute/', views.notifikationFormDeleteExecute, name='notifikationDelee'),
+    path('ProjectAdd/', views.projectadd, name='AddProject'),
+    path('ProjectAddAdmin/', views.projectadd, name='AddProjectAdmin'),
     path('Start/',views.SartPage,name = 'startpage')
 ]
 

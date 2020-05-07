@@ -17,7 +17,7 @@ from django.urls import reverse
 from django.contrib.auth.forms import UserCreationForm
 from django.views.generic.edit import CreateView
 from django.http import JsonResponse
-from .forms import SignUpForm, UserProfileInfoForm , NotificationAdd
+from .forms import SignUpForm, UserProfileInfoForm , NotificationAdd, projektadd
 from django.contrib.auth import authenticate
 
 # Create your views here.
@@ -299,3 +299,23 @@ def SartPage(request):
         else:
             return  render(request,'polls/startUser.html')
 
+def projectadd(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('polls:login'))
+    else:
+        registered = False
+        if request.method == 'POST':
+            noti_form = projektadd(data=request.POST)
+            if noti_form.is_valid():
+                ProjectAdd = noti_form.save(commit=False)
+                ProjectAdd.save()
+                registered = True
+            else:
+                print(noti_form.errors)
+        else:
+            noti_form = projektadd()
+        czyAdmin = get_object_or_404(Person, user=request.user).admin
+        return render(request, 'polls/ProjectAddAdmin.html',
+                      {'noti_form': noti_form,
+                       'registered': registered,
+                       'czyAdmin': czyAdmin})
