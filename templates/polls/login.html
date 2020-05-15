@@ -1,4 +1,37 @@
-
+<style>
+    *, body{
+        text-transform: uppercase;
+    }
+    input{
+        background: #000;
+        border: none;
+        padding: 10px;
+        width: 100%;
+        border-radius: 5px;
+    }
+    .button{
+        cursor: pointer;
+        border-radius: 25px;
+        border: 1px solid #2b2b2b;
+        width: 100%;
+        transition: 0.3s ease;
+        letter-spacing: 2px;
+        font-weight: bold;
+    }
+    .button:hover{
+        background: #444444;
+        transition: 0.3 ease;
+    }
+    form{
+        text-align: center;
+        width: 500px;
+    }
+    label{
+        display: block;
+        padding: 20px 10px;
+        letter-spacing: 2px;
+    }
+</style>
 
 {% extends "polls/base.html" %}
 {#  load staticfiles %}#}
@@ -7,12 +40,12 @@
 <form action="{% url 'polls:login' %}" method="post">
 {% csrf_token %}
 
-    <label for="username">Login</label><br>
-    <input type="text" id="login" name="username" ><br>
-    <label for="password">Password</label><br>
-    <input type="password" id="password" name="password" ><br>
-    <label for="position">Stanowisko</label><br>
-    <input type="submit" value="login">
+    <label for="username">Login</label>
+    <input type="text" id="login" name="username" >
+    <label for="password">Password</label>
+    <input type="password" id="password" name="password" >
+    <label for="position">Stanowisko</label>
+    <input class="button" type="submit" value="login">
 </form>
 </div>
 
