@@ -39,8 +39,8 @@ class NotificationAdd(forms.ModelForm):
 
     projectOwner = forms.NumberInput()
 
-    start_date = forms.DateTimeField(input_formats=['%d/%m/%Y %H:%M:%S', '%d/%m/%Y %H:%M',])
-    end_date = forms.DateTimeField(input_formats=['%d/%m/%Y %H:%M:%S', '%d/%m/%Y %H:%M',])
+    start_date = forms.DateTimeField(input_formats=['%d/%m/%Y %H:%M:%S', '%d/%m/%Y %H:%M'])
+    edn_date = forms.DateTimeField(input_formats=['%d/%m/%Y %H:%M:%S', '%d/%m/%Y %H:%M'])
 
 
 
@@ -52,8 +52,9 @@ class NotificationAdd(forms.ModelForm):
 
     class Meta():
         model = Notification
-        fields = ('what','projectOwner','start_date','end_date')
-        labels = {'projectOwner': 'Project name'}
+        fields = ('what','projectOwner','start_date','edn_date')
+        labels = {'projectOwner': 'Project name',
+                  'edn_date':'End date'}
 
 class projektadd(forms.ModelForm):
 
