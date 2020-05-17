@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html lang="pl">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "polls/base.html" %}
+{#  load staticfiles %}#}
+{% block body_block %}
 <table>
   <tr>
       <th>Id</th>
@@ -12,16 +8,23 @@
       <th>Opis</th>
       <th>Project owner</th>
       <th>Status</th>
+      <th>Notification</th>
   </tr>
 
-{% if person %}
+{% if project %}
     <tr>
     {% for p in project %}
-
+        <td>{{ p.idProject }}</td>
          <td>{{ p.name }}</td>
          <td>{{ p.description }}</td>
          <td>{{ p.owner }}</td>
          <td>{{ p.state }}</td>
+        <td>
+            <form action="{% url 'polls:notifikationProject' %}" method="post">
+            {% csrf_token %}
+                 <input type="number" id="id" name="id" style="display: none" value="{{ p.idProject }}">
+                <input type="submit" value="Notifikation">
+            </form></td></tr>
          </tr>
     {% endfor %}
 
@@ -30,7 +33,5 @@
 {% endif %}
 </table>
 
-<a href="{% url 'polls:addPerson' %}" ><button>Add</button></a>
-
-</body>
-</html>
+<a href="" ><button>Add</button></a>
+{% endblock %}

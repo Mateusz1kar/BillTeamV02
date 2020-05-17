@@ -156,7 +156,7 @@ class ProjectList(generic.ListView):
     context_object_name = 'project'
 
     def get_queryset(self):
-        return Project.objects.order_by('idProject')
+        return Project.objects.all()
 
 
 
@@ -267,11 +267,9 @@ def NotifikationUser(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('polls:login'))
     else:
-        registered = False
-
         if request.method == 'POST':
             return render(request, 'polls/notifikationUser.html',
-                          {'notifikation': Notification.objects.filter(who=request.POST['id'])})
+                          {'notifikation': Notification.objects.filter(who=request.POST['id']).order_by('start_date')})
 
 
 
@@ -295,9 +293,9 @@ def SartPage(request):
     else:
         person = get_object_or_404(Person, user=request.user)
         if( person.admin) :
-            return  render(request,'polls/StartAdmin.html')
+            return render(request,'polls/StartAdmin.html')
         else:
-            return  render(request,'polls/startUser.html')
+            return render(request,'polls/startUser.html')
 
 def projectadd(request):
     if not request.user.is_authenticated:
@@ -319,3 +317,33 @@ def projectadd(request):
                       {'noti_form': noti_form,
                        'registered': registered,
                        'czyAdmin': czyAdmin})
+
+def NotifikationProject(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('polls:login'))
+    else:
+        if request.method == 'POST':
+            return render(request, 'polls/ProjectDetail.html',
+                {'notifikation': Notification.objects.filter(projectOwner_id=request.POST['id']).order_by('start_date')})#request.POST['id']
+                                #nie dzziała
+class  DetailProject(generic.DetailView):
+    template_name = 'polls/ProjectDetail.html'
+    context_object_name = 'project'
+
+    def get_queryset(self, **kwargs):
+        if not self.request.user.is_authenticated:
+            return HttpResponseRedirect(reverse('polls:login'))
+        else:
+            return Notification.objects.order_by('idNotification')
+                    #'project':Project.objects.filter(idProject=1)
+# def projectList(request):
+#     if not request.user.is_authenticated:
+#         return HttpResponseRedirect(reverse('polls:login'))
+#     else:
+#         person = Person.object.get(uesr=request.user)
+#         if person.admin:
+#             #if request.method == 'POST':
+#             return render(request, 'polls/notifikationUser.html',
+#                         {'projects': Project.objects.filter(idProject=request.POST['id']).order_by('idProject')})
+#         else :
+#             return render(request, 'polls/startUser.html')

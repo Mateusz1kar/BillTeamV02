@@ -20,7 +20,7 @@
       {% else %}
         <h1>Register Here</h1>
         <h3>Just fill out the form.</h3>
-<form enctype="multipart/form-data" action="{% url 'polls:notifikationSend' %}" method="POST">
+<form enctype="multipart/form-data" action="{% url 'polls:AddProject' %}" method="POST">
           {% csrf_token %}
           {{ noti_form.as_p }}
 

@@ -1,10 +1,50 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "polls/base.html" %}
+{#  load staticfiles %}#}
+{% block body_block %}
+
+ <div class="container">
+<!--    <h1>{{project.idProject}} {{project.name}}</h1>-->
+<!--    <p>-->
+<!--        {{project.description}}-->
+<!--    </p>-->
+<!--    <h3>Owner: {{project.owner}}</h3>-->
+    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+   <table>
+  <tr>
+      <th>Id</th>
+      <th>Who</th>
+      <th>What</th>
+      <th>Project</th>
+      <th>Start_date</th>
+      <th>Edn_date</th>
+      <th>Delet</th>
+  </tr>
+
+{% if notifikation.count > 0  %}
+    <tr>
+    {% for n in notifikation %}
+         <td>{{ n.idNotification }}</td>
+         <td>{{ n.who }}</td>
+         <td>{{ n.what }}</td>
+         <td>{{ n.projectOwner }}</td>
+         <td>{{ n.start_date }}</td>
+        <td>{{ n.Edn_date }}</td>
+        <td>
+            <form action="{% url 'polls:notifikationDelee' %}" method="post">
+        {% csrf_token %}
+             <input type="number" id="id" name="id" style="display: none" value="{{ n.idNotification }}">
+            <input type="submit" value="Delete">
+        </form></td></tr>
+    {% endfor %}
+
+{% else %}
+    <p>No polls are available.</p>
+{% endif %}
+</table>
+  </div>
+
+
+
+
+
+{% endblock %}

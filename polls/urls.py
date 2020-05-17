@@ -10,7 +10,7 @@ urlpatterns = [
     path('PersonList/', views.PersonList.as_view(), name='personList'),
     path('DetailPerson/<int:pk>/', views.DetailPerson.as_view(), name='detailPerson'),
     # ex: /polls/5/results/
-   # path('detailProject/<int:idProject>/', views.detailProject, name='detailProject'),
+    path('DetailProject/<int:pk>/', views.DetailProject.as_view(), name='detailProject'),   #nie dzziała
     # ex: /polls/5/vote/
    # path('detailNotification/<int:idNotification>/', views.detailNotification, name='detailNotification'),
     path('PersonFormExecute/', views.personFormExecute, name='personFormExecute'),
@@ -33,7 +33,9 @@ urlpatterns = [
     path('NotifikationFormDeleteExecute/', views.notifikationFormDeleteExecute, name='notifikationDelee'),
     path('ProjectAdd/', views.projectadd, name='AddProject'),
     path('ProjectAddAdmin/', views.projectadd, name='AddProjectAdmin'),
-    path('Start/',views.SartPage,name = 'startpage')
+    path('Start/', views.SartPage, name='startpage'),
+
+    path('NotifikationProject/', views.NotifikationProject, name='notifikationProject')
 ]
 
 
