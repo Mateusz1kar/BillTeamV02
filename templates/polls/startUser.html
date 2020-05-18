@@ -3,11 +3,12 @@
 {% block body_block %}
 <h1>User home page</h1>
 <div class="container">
-
+<h2>{{ person.user.first_name }} {{  person.user.last_name }}</h2>
+    <h3>{{ person.position }}</h3>
    <table>
   <tr>
       <th>Id</th>
-      <th>Who</th>
+<!--      <th>Who</th>-->
       <th>What</th>
       <th>Project</th>
       <th>Start_date</th>
@@ -18,7 +19,7 @@
     <tr>
     {% for n in notifikation %}
          <td>{{ n.idNotification }}</td>
-         <td>{{ n.who }}</td>
+<!--         <td>{{ n.who }}</td>-->
          <td>{{ n.what }}</td>
          <td>{{ n.projectOwner }}</td>
          <td>{{ n.start_date }}</td>
@@ -35,5 +36,6 @@
     <p>No polls are available.</p>
 {% endif %}
        <h1>Godziny w obecnym miesiacu: {{sumHouersInMonth}}  </h1>
+    <h2>Godziny w poprzednim miesiacu: {{sumHouersInLastMonth}}  </h2>
 </div>
 {% endblock %}

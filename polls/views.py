@@ -271,7 +271,7 @@ def NotifikationUser(request):
         if request.method == 'POST':
             notifikationList = Notification.objects.filter(who=request.POST['id'])
             sumHouersInMonth = 0
-
+            sumHouersInLastMonth=0
 
             for n in notifikationList:
                 if n.start_date.month == datetime.now().month:
@@ -279,10 +279,15 @@ def NotifikationUser(request):
                     d1 = datetime.strptime(n.start_date.strftime(fmt), fmt)
                     d2 = datetime.strptime(n.edn_date.strftime(fmt), fmt)
                     sumHouersInMonth += (d2 - d1).seconds /60 /60  #* 24 *60 #.days
-
+                if n.start_date.month == datetime.now().month - 1:
+                    fmt = '%d/%m/%Y %H:%M'
+                    d1 = datetime.strptime(n.start_date.strftime(fmt), fmt)
+                    d2 = datetime.strptime(n.edn_date.strftime(fmt), fmt)
+                    sumHouersInLastMonth += (d2 - d1).seconds / 60 / 60  # * 24 *60 #.days
         return render(request, 'polls/notifikationUser.html',
                           {'notifikation': Notification.objects.filter(who=request.POST['id']).order_by('start_date'),
-                           'sumHouersInMonth':sumHouersInMonth
+                           'sumHouersInMonth':sumHouersInMonth,
+                           'sumHouersInLastMonth':sumHouersInLastMonth
                            })
 
 
@@ -306,23 +311,35 @@ def SartPage(request):
         return HttpResponseRedirect(reverse('polls:login'))
     else:
         person = get_object_or_404(Person, user=request.user)
+        notifikationList = Notification.objects.filter(who=person.id)
+        sumHouersInMonth = 0
+        sumHouersInLastMonth = 0
+
+        for n in notifikationList:
+            if n.start_date.month == datetime.now().month:
+                fmt = '%d/%m/%Y %H:%M'
+                d1 = datetime.strptime(n.start_date.strftime(fmt), fmt)
+                d2 = datetime.strptime(n.edn_date.strftime(fmt), fmt)
+                sumHouersInMonth += (d2 - d1).seconds / 60 / 60  # * 24 *60 #.days
+            if n.start_date.month == datetime.now().month - 1:
+                fmt = '%d/%m/%Y %H:%M'
+                d1 = datetime.strptime(n.start_date.strftime(fmt), fmt)
+                d2 = datetime.strptime(n.edn_date.strftime(fmt), fmt)
+                sumHouersInLastMonth += (d2 - d1).seconds / 60 / 60  # * 24 *60 #.days
         if( person.admin) :
             return render(request,'polls/StartAdmin.html',
-                          {'person':person })
+                          {'person':person,
+                           'notifikation':notifikationList,
+                           'sumHouersInMonth': sumHouersInMonth,
+                           'sumHouersInLastMonth':sumHouersInLastMonth
+                           })
         else:
-            notifikationList = Notification.objects.filter(who=person.id)
-            sumHouersInMonth = 0
 
-            for n in notifikationList:
-                if n.start_date.month == datetime.now().month:
-                    fmt = '%d/%m/%Y %H:%M'
-                    d1 = datetime.strptime(n.start_date.strftime(fmt), fmt)
-                    d2 = datetime.strptime(n.edn_date.strftime(fmt), fmt)
-                    sumHouersInMonth += (d2 - d1).seconds / 60 / 60  # * 24 *60 #.days
             return render(request,'polls/startUser.html',
                           {'person':person,
                            'notifikation':notifikationList,
-                           'sumHouersInMonth': sumHouersInMonth
+                           'sumHouersInMonth': sumHouersInMonth,
+                           'sumHouersInLastMonth':sumHouersInLastMonth
                            })
 
 def projectadd(request):
