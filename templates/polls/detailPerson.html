@@ -31,7 +31,7 @@
 </form>
     <form action="{% url 'polls:notifikationUser' %}" method="post">
         {% csrf_token %}
-             <input type="number" id="id" name="id" style="display: none" value="{{ person.id }}">
+             <input type="number" id="idN" name="id" style="display: none" value="{{ person.id }}">
             <input type="submit" value="Notifikation">
         </form>
 

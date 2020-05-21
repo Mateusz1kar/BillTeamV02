@@ -22,7 +22,7 @@
          <td>{{ n.what }}</td>
          <td>{{ n.projectOwner }}</td>
          <td>{{ n.start_date }}</td>
-        <td>{{ n.Edn_date }}</td>
+        <td>{{ n.edn_date }}</td>
         <td>
             <form action="{% url 'polls:notifikationDelee' %}" method="post">
         {% csrf_token %}
@@ -34,6 +34,8 @@
 {% else %}
     <p>No polls are available.</p>
 {% endif %}
+       <h1>Godziny w obecnym miesiacu: {{sumHouersInMonth}}  </h1>
+        <h2>Godziny w poprzednim miesiacu: {{sumHouersInLastMonth}}  </h2>
 </table>
   </div>
 {% endblock %}

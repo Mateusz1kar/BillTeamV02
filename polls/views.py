@@ -9,7 +9,7 @@ from django.views import generic
 from .models import Person, Project, Notification
 
 #logowanie
-import datetime
+# import datetime
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
@@ -20,6 +20,7 @@ from django.http import JsonResponse
 from .forms import SignUpForm, UserProfileInfoForm , NotificationAdd, projektadd
 from django.contrib.auth import authenticate
 
+from datetime import datetime
 # Create your views here.
 
 class PersonList(generic.ListView):
@@ -156,7 +157,7 @@ class ProjectList(generic.ListView):
     context_object_name = 'project'
 
     def get_queryset(self):
-        return Project.objects.order_by('idProject')
+        return Project.objects.all()
 
 
 
@@ -267,11 +268,27 @@ def NotifikationUser(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('polls:login'))
     else:
-        registered = False
-
         if request.method == 'POST':
-            return render(request, 'polls/notifikationUser.html',
-                          {'notifikation': Notification.objects.filter(who=request.POST['id'])})
+            notifikationList = Notification.objects.filter(who=request.POST['id'])
+            sumHouersInMonth = 0
+            sumHouersInLastMonth=0
+
+            for n in notifikationList:
+                if n.start_date.month == datetime.now().month:
+                    fmt = '%d/%m/%Y %H:%M'
+                    d1 = datetime.strptime(n.start_date.strftime(fmt), fmt)
+                    d2 = datetime.strptime(n.edn_date.strftime(fmt), fmt)
+                    sumHouersInMonth += (d2 - d1).seconds /60 /60  #* 24 *60 #.days
+                if n.start_date.month == datetime.now().month - 1:
+                    fmt = '%d/%m/%Y %H:%M'
+                    d1 = datetime.strptime(n.start_date.strftime(fmt), fmt)
+                    d2 = datetime.strptime(n.edn_date.strftime(fmt), fmt)
+                    sumHouersInLastMonth += (d2 - d1).seconds / 60 / 60  # * 24 *60 #.days
+        return render(request, 'polls/notifikationUser.html',
+                          {'notifikation': Notification.objects.filter(who=request.POST['id']).order_by('start_date'),
+                           'sumHouersInMonth':sumHouersInMonth,
+                           'sumHouersInLastMonth':sumHouersInLastMonth
+                           })
 
 
 
@@ -294,10 +311,36 @@ def SartPage(request):
         return HttpResponseRedirect(reverse('polls:login'))
     else:
         person = get_object_or_404(Person, user=request.user)
+        notifikationList = Notification.objects.filter(who=person.id)
+        sumHouersInMonth = 0
+        sumHouersInLastMonth = 0
+
+        for n in notifikationList:
+            if n.start_date.month == datetime.now().month:
+                fmt = '%d/%m/%Y %H:%M'
+                d1 = datetime.strptime(n.start_date.strftime(fmt), fmt)
+                d2 = datetime.strptime(n.edn_date.strftime(fmt), fmt)
+                sumHouersInMonth += (d2 - d1).seconds / 60 / 60  # * 24 *60 #.days
+            if n.start_date.month == datetime.now().month - 1:
+                fmt = '%d/%m/%Y %H:%M'
+                d1 = datetime.strptime(n.start_date.strftime(fmt), fmt)
+                d2 = datetime.strptime(n.edn_date.strftime(fmt), fmt)
+                sumHouersInLastMonth += (d2 - d1).seconds / 60 / 60  # * 24 *60 #.days
         if( person.admin) :
-            return  render(request,'polls/StartAdmin.html')
+            return render(request,'polls/StartAdmin.html',
+                          {'person':person,
+                           'notifikation':notifikationList,
+                           'sumHouersInMonth': sumHouersInMonth,
+                           'sumHouersInLastMonth':sumHouersInLastMonth
+                           })
         else:
-            return  render(request,'polls/startUser.html')
+
+            return render(request,'polls/startUser.html',
+                          {'person':person,
+                           'notifikation':notifikationList,
+                           'sumHouersInMonth': sumHouersInMonth,
+                           'sumHouersInLastMonth':sumHouersInLastMonth
+                           })
 
 def projectadd(request):
     if not request.user.is_authenticated:
@@ -319,3 +362,33 @@ def projectadd(request):
                       {'noti_form': noti_form,
                        'registered': registered,
                        'czyAdmin': czyAdmin})
+
+def NotifikationProject(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('polls:login'))
+    else:
+        if request.method == 'POST':
+            return render(request, 'polls/ProjectDetail.html',
+                {'notifikation': Notification.objects.filter(projectOwner_id=request.POST['id']).order_by('start_date')})#request.POST['id']
+                                #nie dzziała
+class  DetailProject(generic.DetailView):
+    template_name = 'polls/ProjectDetail.html'
+    context_object_name = 'project'
+
+    def get_queryset(self, **kwargs):
+        if not self.request.user.is_authenticated:
+            return HttpResponseRedirect(reverse('polls:login'))
+        else:
+            return Notification.objects.order_by('idNotification')
+                    #'project':Project.objects.filter(idProject=1)
+# def projectList(request):
+#     if not request.user.is_authenticated:
+#         return HttpResponseRedirect(reverse('polls:login'))
+#     else:
+#         person = Person.object.get(uesr=request.user)
+#         if person.admin:
+#             #if request.method == 'POST':
+#             return render(request, 'polls/notifikationUser.html',
+#                         {'projects': Project.objects.filter(idProject=request.POST['id']).order_by('idProject')})
+#         else :
+#             return render(request, 'polls/startUser.html')
