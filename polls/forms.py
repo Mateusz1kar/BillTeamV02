@@ -11,13 +11,17 @@ from polls.models import Person ,Notification, Project
 
 
 class SignUpForm(UserCreationForm):
-    first_name = forms.CharField(max_length=30, required=False, help_text='Optional.')
-    last_name = forms.CharField(max_length=30, required=False, help_text='Optional.')
-    email = forms.EmailField(max_length=254, help_text='Required. Inform a valid email address.')
+    first_name = forms.CharField(max_length=30, required=False, help_text='Opcjonalne.', label="Imie")
+    last_name = forms.CharField(max_length=30, required=False, help_text='Opcjonalne', label="Nazwisko")
+    email = forms.EmailField(max_length=254, help_text='Wymagane',label="E-Mail")
+
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password1', 'password2', 'last_name','first_name','email')
+        fields = ('username', 'email','first_name','last_name', 'password1', 'password2')
+        labels = {
+            "username": "Login"
+        }
 
 class DateInput(forms.DateInput):
     input_type = 'date'
@@ -26,21 +30,22 @@ class TimeInput(forms.TimeInput):
     input_type = 'time'
 
 class UserProfileInfoForm(forms.ModelForm):
-    position = forms.CharField(max_length=30, required=False, help_text='Optional.')
-    admin = forms.BooleanField(required=False, help_text='Optional.')
+    position = forms.CharField(max_length=30, required=False, help_text='Opcjonalnie')
+    admin = forms.BooleanField(required=False, )
+
     class Meta():
         model = Person
         fields = ('position', 'admin')
 
 
 class NotificationAdd(forms.ModelForm):
-    what = forms.CharField(max_length=30, required=True)
+    what = forms.CharField(max_length=30, required=True, label="Opis")
     #projectOwner = forms.CharField(max_length=30, required=False, help_text='Optional.')
 
     projectOwner = forms.NumberInput()
 
-    start_date = forms.DateTimeField(input_formats=['%Y-%m-%d %H:%M:%S', '%Y-%m-%d %H:%M',])
-    end_date = forms.DateTimeField(input_formats=['%Y-%m-%d %H:%M:%S', '%Y-%m-%d %H:%M',])
+    start_date = forms.DateTimeField(input_formats=['%Y-%m-%d %H:%M:%S', '%Y-%m-%d %H:%M',],label="Czas rozpoczęcia")
+    end_date = forms.DateTimeField(input_formats=['%Y-%m-%d %H:%M:%S', '%Y-%m-%d %H:%M',],label="Czas zakończenia")
 
 
 
@@ -52,23 +57,20 @@ class NotificationAdd(forms.ModelForm):
 
     class Meta():
         model = Notification
-        fields = ('what','projectOwner','start_date','end_date')
-        labels = {'projectOwner': 'Project name'}
+        fields = ('projectOwner','what','start_date','end_date')
+        labels = {'projectOwner': 'Projekt'}
 
 class projektadd(forms.ModelForm):
 
-    name = forms.CharField(max_length=50, required=True)
-    description = forms.CharField(max_length=50, required=True)
+    name = forms.CharField(max_length=50, required=True, label="Nazwa Projektu")
+    description = forms.CharField(max_length=50, required=True, label="Opis")
     owner = forms.NumberInput()
-    state = forms.CharField(max_length=50, required=True)
+    state = forms.CharField(max_length=50, required=True,label="Status projektu")
 
     class Meta():
         model = Project
         fields = ('name','description','owner','state')
-        labels = {'name': 'Project Name',
-                  'description': 'Description',
-                  'owner': 'Owner',
-                  'state': 'Actual state'}
+        labels = {'owner': 'Kierownik projektu'}
 # class NotificationProjectId(forms.ModelForm):
 #
 #     projectOwner = forms.NumberInput(required=True)

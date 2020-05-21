@@ -18,16 +18,16 @@
       <div class="container">
         <ul class="nav navbar-nav">
 {# Django Home Link / Admin Link / Register Link#}
-            <li><a class="navbar-brand" href="{% url 'polls:startpage' %}">MainPage</a></li>
-            <li><a class="navbar-link" href="{% url 'polls:register' %}">Create account</a></li>
-            <li><a class="navbar-link" href="{% url 'polls:personList' %}">Employees</a></li>
-            <li><a class="navbar-link" href="{% url 'polls:notifikationSend' %}">Send Notification</a></li>
-            <li><a class="navbar-link" href="{% url 'polls:AddProjectAdmin' %}">Add Project</a></li>
+            <li><a class="navbar-brand" href="{% url 'polls:startpage' %}">Strona Główna</a></li>
+            <li><a class="navbar-link" href="{% url 'polls:register' %}">Stwórz konto</a></li>
+            <li><a class="navbar-link" href="{% url 'polls:personList' %}">Pracownicy</a></li>
+            <li><a class="navbar-link" href="{% url 'polls:notifikationSend' %}">Formularz czasu pracy</a></li>
+            <li><a class="navbar-link" href="{% url 'polls:AddProjectAdmin' %}">Stwórz projekt</a></li>
           {# Some logic on what to display for last item#}
           {% if user.is_authenticated %}
-            <li><a href="{% url 'polls:logout' %}">Logout</a></li>
+            <li><a href="{% url 'polls:logout' %}">Wyloguj</a></li>
           {% else %}
-            <li><a class="navbar-link" href="{% url 'polls:login' %}">Login</a></li>
+            <li><a class="navbar-link" href="{% url 'polls:login' %}">Zaloguj</a></li>
           {% endif %}
 </ul>
       </div>
