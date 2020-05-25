@@ -18,6 +18,7 @@ urlpatterns = [
     path('AddPersonFormExecute/', views.addPersonFormExecute, name='personAdd'),
 
     path('ProjectList/', views.ProjectList.as_view(), name='projectList'),
+    path('ProjektUsun/', views.ProjectDelExecute, name='projectDel'),
 
     #url(r'^register/$', views.register, name='register'),
     #url(r'^login/$', auth_views.LoginView, name='login'),
@@ -35,7 +36,9 @@ urlpatterns = [
     path('ProjectAddAdmin/', views.projectadd, name='AddProjectAdmin'),
     path('Start/', views.SartPage, name='startpage'),
 
-    path('NotifikationProject/', views.NotifikationProject, name='notifikationProject')
+    path('NotifikationProject/', views.NotifikationProject, name='notifikationProject'),
+    path('Raport/', views.EndMonthRaport, name='raportMont'),
+    path('RaportProjekt/',views.EndMonthProjectRaport,name='raportProject')
 ]
 
 

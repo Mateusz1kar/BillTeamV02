@@ -34,6 +34,11 @@
              <input type="number" id="idN" name="id" style="display: none" value="{{ person.id }}">
             <input type="submit" value="Notifikation">
         </form>
+ <form action="{% url 'polls:raportMont' %}" method="post">
+        {% csrf_token %}
+             <input type="number" id="idP" name="idP" style="display: none" value="{{ person.id }}">
+            <input type="submit" value="Raport Miesięczny">
+        </form>
 
 
 {% endblock %}

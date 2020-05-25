@@ -71,11 +71,11 @@ class projektadd(forms.ModelForm):
     name = forms.CharField(max_length=50, required=True, label="Nazwa Projektu")
     description = forms.CharField(max_length=50, required=True, label="Opis")
     owner = forms.NumberInput()
-    state = forms.CharField(max_length=50, required=True,label="Status projektu")
+    #state = forms.CharField(max_length=50, required=True,label="Status projektu")
 
     class Meta():
         model = Project
-        fields = ('name','description','owner','state')
+        fields = ('name','description','owner')#,'state')
         labels = {'owner': 'Kierownik projektu'}
 # class NotificationProjectId(forms.ModelForm):
 #

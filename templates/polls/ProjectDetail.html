@@ -3,11 +3,10 @@
 {% block body_block %}
 
  <div class="container">
-<!--    <h1>{{project.idProject}} {{project.name}}</h1>-->
-<!--    <p>-->
-<!--        {{project.description}}-->
-<!--    </p>-->
-<!--    <h3>Owner: {{project.owner}}</h3>-->
+    <h1>{{project.idProject}} {{project.name}}</h1>
+    <p>
+        {{project.description}}
+    </p>
     {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
    <table>
   <tr>

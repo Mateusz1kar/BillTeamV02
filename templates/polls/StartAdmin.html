@@ -37,5 +37,6 @@
 {% endif %}
        <h1>Godziny w obecnym miesiacu: {{sumHouersInMonth}}  </h1>
     <h2>Godziny w poprzednim miesiacu: {{sumHouersInLastMonth}}  </h2>
+    <a class="navbar-brand" href="{% url 'polls:raportMont' %}">Zakończenie miesiąca</a>
 </div>
 {% endblock %}
