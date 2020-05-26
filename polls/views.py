@@ -274,7 +274,6 @@ def NotifikationForm(request):
         if request.method == 'POST':
             noti_form= NotificationAdd(data=request.POST)
             if noti_form.is_valid():
-
                 notifikation = noti_form.save(commit=False)
                 notifikation.who = request.user
                # notifikation.projectOwner = get_object_or_404(Project,idNotification=noti_form.data.projectOwner)
