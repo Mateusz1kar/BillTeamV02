@@ -1,19 +1,19 @@
 {% extends "polls/base.html" %}
 {#  load staticfiles %}#}
 {% block body_block %}
-<h1>Admin home page</h1>
+<h1>Strona Główna Administratora</h1>
 <div class="container">
 <h2>{{ person.user.first_name }} {{  person.user.last_name }}</h2>
-    <h3>{{ person.position }}</h3>
+    <h3>Twoje raporty czasu pracy</h3>
    <table>
   <tr>
-      <th>Id</th>
+      <th>ID Projektu</th>
 <!--      <th>Who</th>-->
-      <th>What</th>
-      <th>Project</th>
-      <th>Start_date</th>
-      <th>Edn_date</th>
-      <th>Delet</th>
+      <th>Nazwa Projektu</th>
+      <th>Projekt</th>
+      <th>Rozpoczęcie</th>
+      <th>Zakończenie</th>
+      <th>Usunąć?</th>
   </tr>
 {% if notifikation.count > 0  %}
     <tr>
@@ -28,12 +28,12 @@
             <form action="{% url 'polls:notifikationDelee' %}" method="post">
         {% csrf_token %}
              <input type="number" id="id" name="id" style="display: none" value="{{ n.idNotification }}">
-            <input type="submit" value="Delete">
+            <input type="submit" value="Usuń">
         </form></td></tr>
     {% endfor %}
    </table>
 {% else %}
-    <p>No polls are available.</p>
+    <p>Brak raportów w tym miesiącu</p>
 {% endif %}
        <h1>Godziny w obecnym miesiacu: {{sumHouersInMonth}}  </h1>
     <h2>Godziny w poprzednim miesiacu: {{sumHouersInLastMonth}}  </h2>

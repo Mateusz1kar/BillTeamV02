@@ -16,14 +16,14 @@
   <div class="container">
     <div class="jumbotron">
       {% if registered %}
-        <h1>Thank you for registering!</h1>
+        <h1>Czas pracy zarejestrowany</h1>
       {% else %}
         <h1>Formularz czasu pracy</h1>
         <h3>Wypełnij formularz i wyślij</h3>
         <form enctype="multipart/form-data" action="{% url 'polls:notifikationSend' %}" method="POST">
             {% csrf_token %}
                 {{ noti_form.as_p }}
-            <input type="submit" name="" value="Send">
+            <input type="submit" name="" value="Wyślij">
         </form>
         
       {% endif %}

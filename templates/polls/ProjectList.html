@@ -2,16 +2,17 @@
 {#  load staticfiles %}#}
 {% block body_block %}
 <table>
-  <tr>
+
+
+{% if project %}
+    <tr>
       <th>Id</th>
       <th>Nazwa</th>
       <th>Opis</th>
       <th>Project owner</th>
       <th>Status</th>
       <th>Notification</th>
-  </tr>
-
-{% if project %}
+    </tr>
     <tr>
     {% for p in project %}
         <td>{{ p.idProject }}</td>
@@ -23,13 +24,13 @@
             <form action="{% url 'polls:notifikationProject' %}" method="post">
             {% csrf_token %}
                  <input type="number" id="id" name="id" style="display: none" value="{{ p.idProject }}">
-                <input type="submit" value="Notifikation">
+                <input type="submit" value="Raporty czasu pracy">
             </form></td>
         <td>
             <form action="{% url 'polls:projectDel' %}" method="post">
             {% csrf_token %}
                  <input type="number" id="idDel" name="idDel" style="display: none" value="{{ p.idProject }}">
-                <input type="submit" value="Delete">
+                <input type="submit" value="Usuń">
             </form></td>
          <td>
             <form action="{% url 'polls:raportProject' %}" method="post">
