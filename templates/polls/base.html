@@ -11,11 +11,134 @@
   <!-- XDSoft DateTimePicker -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
+<style>
+    *, html, body{
+        box-sizing: border-box;
+        margin: 0;
+        color: #fff;
+    }
+    html{
+        height: 100%;
+    }
+    body{
+        background: #1968A0;
+        min-height: 100%;
+    }
+    form, h1{
+        text-align: center;
+        margin: 0 auto;
+    }
+    form input{
+        margin-bottom: 50px;
+        width: 100%;
+        padding: 20px;
+        background: rgba(0, 0, 0, 0.46);
+        display: block;
+        border-radius: 15px;
+        border: none;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        font-size: 20px;
+    }
+    form label{
+        font-size: 24px;
+        margin-bottom: 20px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        font-weight: 500;
+        border-bottom: 1px solid #000;
+        width: 100%;
+    }
+    form #login{
+        margin-bottom: 50px;
+    }
+    h1{
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        margin-top: 30px;
+        font-weight: 400;
+    }
+    form{
+        max-width: 800px;
+        margin-top: 100px;
+    }
+    input[type="submit"]{
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        background: #0c9915;
+        border: none;
+        padding: 15px;
+        border-radius: 25px;
+        transition: 0.3s;
+        font-weight: 500;
+        width: 100%;
+        font-size: 18px;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    }
+    input[type="submit"]:hover{
+        background: #0eaf18;
+        letter-spacing: 5px;
+    }
+    .navbar{
+        background: #000;
+        color: #fff;
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-weight: 500;
+        padding-bottom: 10px;
+        padding-top: 10px;
+        border-color: #828282;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    }
+   .navbar a.navbar-link{
+        color: #fff !important;
+        border-bottom: 2px solid #000;
+        transition: 0.3s ease;
+    }
+    .navbar a.navbar-link:hover{
+        border-bottom: 1px solid #fff;
+    }
+    .navbar a.navbar-brand:hover{
+        border-bottom: 2px solid #89d38a;
+    }
+    a.navbar-brand{
+        color: #89d38a !important;
+    }
+    .navbar ul{
+        width: 100%;
+    }
+    .navbar ul li:last-child{
+        float: right;
+    }
+    .navbar ul li:last-child a{
+         color: #ccc !important;
+     }
+    .navbar ul li:last-child:hover a:after{
+        content: ":(";
+        color: red;
+        font-size: 25px;
+        transition: 0.5s;
+        width: 35px;
+        height: 35px;
+        position: absolute;
+        transform: translate(-50px, 80px);
+    }
+    .container{
+        margin: 0 auto;
+    }
+    @media (min-width: 1200px){
+        .container{
+            width: 1600px;
+        }
+    }
 
+
+</style>
 </head>
   <body>
     <nav class="navbar navbar-default navbar-static-top">
       <div class="container">
+
         <ul class="nav navbar-nav">
 
 
@@ -35,6 +158,7 @@
 </ul>
       </div>
     </nav>
+
     <div class="container">
     {% block body_block %}
     {% endblock %}
