@@ -17,6 +17,9 @@
         margin: 0;
         color: #fff;
     }
+    li{
+        list-style-type: none;
+    }
     html{
         height: 100%;
         overflow-x: hidden;
@@ -58,10 +61,10 @@
         letter-spacing: 3px;
         margin-top: 30px;
         font-weight: 400;
+        margin-bottom: 100px;
     }
     form{
         max-width: 800px;
-        margin-top: 100px;
     }
     input[type="submit"]{
         text-transform: uppercase;
@@ -76,7 +79,7 @@
         font-size: 18px;
         box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     }
-    input[type="submit"]:hover{
+    input[type="submit"].login-input:hover, .jumbotron input[type="submit"]:hover{
         background: #0eaf18;
         letter-spacing: 5px;
     }
@@ -116,7 +119,7 @@
          color: #ccc !important;
          transition: 0.3s ease;
      }
-    .navbar ul li:last-child:hover a:after{
+    .navbar ul li:last-child:hover.logout a:after{
         content: ":(";
         color: red;
         font-size: 25px;
@@ -126,11 +129,14 @@
         position: absolute;
         transform: translate(-50px, 80px);
     }
-    .navbar ul li:last-child:hover{
+    .navbar ul li:last-child:hover.logout{
         border-bottom: 1px solid red;
     }
-    .navbar ul li:last-child:hover a{
+    .navbar ul li:last-child:hover.logout a{
         color: red !important;
+    }
+    .navbar ul li:last-child:hover.login a{
+        color: green !important;
     }
     .container{
         margin: 0 auto;
@@ -140,8 +146,63 @@
             width: 1600px;
         }
     }
-
-
+    table{
+        background: #474747;
+        box-shadow: 6px 10px 58px -13px rgba(0,0,0,0.32);
+        margin-bottom: 30px;
+        margin-top: 30px;
+    }
+    table tr{
+        border-radius: 15px;
+    }
+    table td{
+        padding: 25px;
+        border: 1px solid black;
+    }
+    table th{
+        padding: 25px;
+        border-bottom: 1px solid #fff;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        font-weight: 500;
+        background: #2d2d2d;
+    }
+    .jumbotron{
+        background: transparent;
+        border-radius: 50px !important;
+    }
+    .jumbotron h1{
+        font-size: 30px;
+    }
+    .jumbotron input[type="text"]{
+        background: #fff;
+        color: #000;
+    }
+    select[name="projectOwner"]{
+        background: #565656;
+        border-radius: 15px;
+        padding: 16px;
+        cursor: pointer;
+    }
+    select#id_projectOwner:hover{
+        background: #2d2d2d;
+        box-shadow: 6px 10px 58px -13px rgba(0,0,0,0.32);
+    }
+    h3{
+        text-align: center;
+    }
+    .jumbotron .xdsoft_calendar * {
+        background: #000 !important;
+        color: #fff;
+    }
+    input#id_admin{
+        border: none;
+        box-shadow: none;
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+    }
 </style>
 </head>
   <body>
@@ -160,9 +221,9 @@
 
           {# Some logic on what to display for last item#}
           {% if user.is_authenticated %}
-            <li><a href="{% url 'polls:logout' %}">Wyloguj</a></li>
+            <li class="logout"><a href="{% url 'polls:logout' %}">Wyloguj</a></li>
           {% else %}
-            <li><a class="navbar-link" href="{% url 'polls:login' %}">Zaloguj</a></li>
+            <li class="login"><a class="navbar-link" href="{% url 'polls:login' %}">Zaloguj</a></li>
           {% endif %}
 </ul>
       </div>
