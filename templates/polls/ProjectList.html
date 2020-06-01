@@ -30,13 +30,13 @@
             <form action="{% url 'polls:projectDel' %}" method="post">
             {% csrf_token %}
                  <input type="number" id="idDel" name="idDel" style="display: none" value="{{ p.idProject }}">
-                <input type="submit" value="Usuń">
+                <input class="delete-project" type="submit" value="Usuń">
             </form></td>
          <td>
             <form action="{% url 'polls:raportProject' %}" method="post">
             {% csrf_token %}
                  <input type="number" id="idP" name="idP" style="display: none" value="{{ p.idProject }}">
-                <input type="submit" value="Raport">
+                <input class="raport-project" type="submit" value="Raport">
             </form></td>
              </tr>
     {% endfor %}
@@ -46,5 +46,5 @@
 {% endif %}
 </table>
 
-<a class="navbar-link" href="{% url 'polls:AddProjectAdmin' %}"><button>Add</button></a>
+<a class="navbar-link" href="{% url 'polls:AddProjectAdmin' %}"><button class="add-project">Add project</button></a>
 {% endblock %}

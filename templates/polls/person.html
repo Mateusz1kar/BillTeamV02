@@ -21,13 +21,13 @@
          <td>{{ p.user.username }}</td>
          <td>{{ p.position }}</td>
          <td>{{ p.admin }}</td>
-        <td><a href="{% url 'polls:detailPerson'  p.id %}"><button value="Wyswietl">Wyswietl</button> </a></td></tr>
+        <td><a href="{% url 'polls:detailPerson'  p.id %}"><button class="show-person" value="Wyswietl">Wyswietl</button> </a></td></tr>
     {% endfor %}
 
 {% else %}
     <p>No polls are available.</p>
 {% endif %}
 </table>
-<a href="{% url 'polls:register' %}" ><button>Dodaj</button></a>
+<a href="{% url 'polls:register' %}" ><button class="add-person">Dodaj</button></a>
 
 {% endblock %}
