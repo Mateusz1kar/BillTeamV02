@@ -44,13 +44,10 @@ class NotificationAdd(forms.ModelForm):
 
     projectOwner = forms.NumberInput()
 
-<<<<<<< HEAD
-    start_date = forms.DateTimeField(input_formats=['%d/%m/%Y %H:%M:%S', '%d/%m/%Y %H:%M'])
-    edn_date = forms.DateTimeField(input_formats=['%d/%m/%Y %H:%M:%S', '%d/%m/%Y %H:%M'])
-=======
-    start_date = forms.DateTimeField(input_formats=['%Y-%m-%d %H:%M:%S', '%Y-%m-%d %H:%M',],label="Czas rozpoczęcia")
-    end_date = forms.DateTimeField(input_formats=['%Y-%m-%d %H:%M:%S', '%Y-%m-%d %H:%M',],label="Czas zakończenia")
->>>>>>> master
+
+    start_date = forms.DateTimeField(input_formats=['%d/%m/%Y %H:%M:%S', '%d/%m/%Y %H:%M'],label="Czas rozpoczęcia")
+    edn_date = forms.DateTimeField(input_formats=['%d/%m/%Y %H:%M:%S', '%d/%m/%Y %H:%M'],label="Czas zakończenia")
+
 
 
 
@@ -62,25 +59,23 @@ class NotificationAdd(forms.ModelForm):
 
     class Meta():
         model = Notification
-<<<<<<< HEAD
-        fields = ('what','projectOwner','start_date','edn_date')
-        labels = {'projectOwner': 'Project name',
-                  'edn_date':'End date'}
-=======
-        fields = ('projectOwner','what','start_date','end_date')
-        labels = {'projectOwner': 'Projekt'}
->>>>>>> master
+        # fields = ('what','projectOwner','start_date','edn_date')
+        # labels = {'projectOwner': 'Project name',
+        #           'edn_date':'End date'}
+        fields = ('projectOwner','what','start_date','edn_date')
+        labels = {'projectOwner': 'Projekt',
+                  'edn_date':'Czas zakończenia'}
 
 class projektadd(forms.ModelForm):
 
     name = forms.CharField(max_length=50, required=True, label="Nazwa Projektu")
     description = forms.CharField(max_length=50, required=True, label="Opis")
     owner = forms.NumberInput()
-    state = forms.CharField(max_length=50, required=True,label="Status projektu")
+    #state = forms.CharField(max_length=50, required=True,label="Status projektu")
 
     class Meta():
         model = Project
-        fields = ('name','description','owner','state')
+        fields = ('name','description','owner')#,'state')
         labels = {'owner': 'Kierownik projektu'}
 # class NotificationProjectId(forms.ModelForm):
 #

@@ -11,36 +11,259 @@
   <!-- XDSoft DateTimePicker -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
-
+<style>
+    *, html, body{
+        box-sizing: border-box;
+        margin: 0;
+        color: #fff;
+    }
+    li{
+        list-style-type: none;
+    }
+    html{
+        height: 100%;
+        overflow-x: hidden;
+    }
+    body{
+        background: #1968A0;
+        min-height: 100%;
+        overflow-x: hidden;
+    }
+    form, h1{
+        text-align: center;
+        margin: 0 auto;
+    }
+    form input{
+        margin-bottom: 50px;
+        width: 100%;
+        padding: 20px;
+        background: rgba(0, 0, 0, 0.46);
+        display: block;
+        border-radius: 15px;
+        border: none;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        font-size: 20px;
+    }
+    form label{
+        font-size: 24px;
+        margin-bottom: 20px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        font-weight: 500;
+        border-bottom: 1px solid #000;
+        width: 100%;
+    }
+    form #login{
+        margin-bottom: 50px;
+    }
+    h1{
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        margin-top: 30px;
+        font-weight: 400;
+        margin-bottom: 100px;
+    }
+    form{
+        max-width: 800px;
+    }
+    input[type="submit"]{
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        background: #0c9915;
+        border: none;
+        padding: 15px;
+        border-radius: 25px;
+        transition: 0.3s;
+        font-weight: 500;
+        width: 100%;
+        font-size: 18px;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    }
+    input[type="submit"].login-input:hover, .jumbotron input[type="submit"]:hover{
+        background: #0eaf18;
+        letter-spacing: 5px;
+    }
+    .navbar{
+        background: #000;
+        color: #fff;
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-weight: 500;
+        padding-bottom: 10px;
+        padding-top: 10px;
+        border-color: #828282;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    }
+   .navbar a.navbar-link{
+        color: #fff !important;
+        border-bottom: 2px solid #000;
+        transition: 0.3s ease;
+    }
+    .navbar a.navbar-link:hover{
+        border-bottom: 1px solid #fff;
+    }
+    .navbar a.navbar-brand:hover{
+        border-bottom: 2px solid #89d38a;
+    }
+    a.navbar-brand{
+        color: #89d38a !important;
+    }
+    .navbar ul{
+        width: 100%;
+    }
+    .navbar ul li:last-child{
+        float: right;
+    }
+    .navbar ul li:last-child a{
+         color: #ccc !important;
+         transition: 0.3s ease;
+     }
+    .navbar ul li:last-child:hover.logout a:after{
+        content: ":(";
+        color: red;
+        font-size: 25px;
+        transition: 0.5s;
+        width: 35px;
+        height: 35px;
+        position: absolute;
+        transform: translate(-50px, 80px);
+    }
+    .navbar ul li:last-child:hover.logout{
+        border-bottom: 1px solid red;
+    }
+    .navbar ul li:last-child:hover.logout a{
+        color: red !important;
+    }
+    .navbar ul li:last-child:hover.login a{
+        color: green !important;
+    }
+    .container{
+        margin: 0 auto;
+    }
+    @media (min-width: 1200px){
+        .container{
+            width: 1600px;
+        }
+    }
+    table{
+        background: #474747;
+        box-shadow: 6px 10px 58px -13px rgba(0,0,0,0.32);
+        margin-bottom: 30px;
+        margin-top: 30px;
+    }
+    table tr{
+        border-radius: 15px;
+    }
+    table td{
+        padding: 25px;
+        border: 1px solid black;
+    }
+    table th{
+        padding: 25px;
+        border-bottom: 1px solid #fff;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        font-weight: 500;
+        background: #2d2d2d;
+    }
+    .jumbotron{
+        background: transparent;
+        border-radius: 50px !important;
+    }
+    .jumbotron h1{
+        font-size: 30px;
+    }
+    .jumbotron input[type="text"]{
+        background: #fff;
+        color: #000;
+    }
+    select[name="projectOwner"], select#id_owner{
+        background: #565656;
+        border-radius: 15px;
+        padding: 16px;
+        cursor: pointer;
+    }
+    select#id_projectOwner:hover{
+        background: #2d2d2d;
+        box-shadow: 6px 10px 58px -13px rgba(0,0,0,0.32);
+    }
+    h3{
+        text-align: center;
+    }
+    .jumbotron .xdsoft_calendar * {
+        background: #000 !important;
+        color: #fff;
+    }
+    input#id_admin{
+        border: none;
+        box-shadow: none;
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+    }
+    button.show-person{
+        padding: 10px;
+        color: black;
+        border-radius: 5px;
+        font-weight: 500;
+    }
+    button.add-person{
+        background: #0c9915;
+        border: none;
+        padding: 15px;
+        color: #fff;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        box-shadow: 6px 10px 58px -13px rgba(0,0,0,0.32);
+    }
+    table{
+        font-size: 20px;
+    }
+    input.raport-project{
+        background: #2384ce;
+    }
+    input.delete-project{
+        background: #c62525;
+    }
+    button.add-project{
+        background: #0c9915;
+        border: none;
+        padding: 25px;
+        color: #fff;
+        letter-spacing: 2px;
+        box-shadow: 6px 10px 58px -13px rgba(0,0,0,0.32);
+        border-radius: 25px;
+        text-transform: uppercase;
+        font-weight: 700;
+    }
+</style>
 </head>
   <body>
     <nav class="navbar navbar-default navbar-static-top">
       <div class="container">
+
         <ul class="nav navbar-nav">
-{# Django Home Link / Admin Link / Register Link#}
-<<<<<<< HEAD
-            <li><a class="navbar-brand" href="{% url 'polls:startpage' %}">MainPage</a></li>
-            <li><a class="navbar-link" href="{% url 'polls:register' %}">Create account</a></li>
-            <li><a class="navbar-link" href="{% url 'polls:personList' %}">Employees</a></li>
-            <li><a class="navbar-link" href="{% url 'polls:notifikationSend' %}">Send Notification</a></li>
-            <li><a class="navbar-link" href="{% url 'polls:AddProjectAdmin' %}">Add Project</a></li>
-             <li><a class="navbar-link" href="{% url 'polls:projectList' %}">Project List</a></li>
-=======
+
+
             <li><a class="navbar-brand" href="{% url 'polls:startpage' %}">Strona Główna</a></li>
             <li><a class="navbar-link" href="{% url 'polls:register' %}">Stwórz konto</a></li>
             <li><a class="navbar-link" href="{% url 'polls:personList' %}">Pracownicy</a></li>
             <li><a class="navbar-link" href="{% url 'polls:notifikationSend' %}">Formularz czasu pracy</a></li>
             <li><a class="navbar-link" href="{% url 'polls:AddProjectAdmin' %}">Stwórz projekt</a></li>
->>>>>>> master
+             <li><a class="navbar-link" href="{% url 'polls:projectList' %}">Lista projektów</a></li>
+
           {# Some logic on what to display for last item#}
           {% if user.is_authenticated %}
-            <li><a href="{% url 'polls:logout' %}">Wyloguj</a></li>
+            <li class="logout"><a href="{% url 'polls:logout' %}">Wyloguj</a></li>
           {% else %}
-            <li><a class="navbar-link" href="{% url 'polls:login' %}">Zaloguj</a></li>
+            <li class="login"><a class="navbar-link" href="{% url 'polls:login' %}">Zaloguj</a></li>
           {% endif %}
 </ul>
       </div>
     </nav>
+
     <div class="container">
     {% block body_block %}
     {% endblock %}

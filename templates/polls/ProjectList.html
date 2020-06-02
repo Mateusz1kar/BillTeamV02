@@ -2,16 +2,17 @@
 {#  load staticfiles %}#}
 {% block body_block %}
 <table>
-  <tr>
+
+
+{% if project %}
+    <tr>
       <th>Id</th>
       <th>Nazwa</th>
       <th>Opis</th>
       <th>Project owner</th>
       <th>Status</th>
       <th>Notification</th>
-  </tr>
-
-{% if project %}
+    </tr>
     <tr>
     {% for p in project %}
         <td>{{ p.idProject }}</td>
@@ -23,9 +24,21 @@
             <form action="{% url 'polls:notifikationProject' %}" method="post">
             {% csrf_token %}
                  <input type="number" id="id" name="id" style="display: none" value="{{ p.idProject }}">
-                <input type="submit" value="Notifikation">
-            </form></td></tr>
-         </tr>
+                <input type="submit" value="Raporty czasu pracy">
+            </form></td>
+        <td>
+            <form action="{% url 'polls:projectDel' %}" method="post">
+            {% csrf_token %}
+                 <input type="number" id="idDel" name="idDel" style="display: none" value="{{ p.idProject }}">
+                <input class="delete-project" type="submit" value="Usuń">
+            </form></td>
+         <td>
+            <form action="{% url 'polls:raportProject' %}" method="post">
+            {% csrf_token %}
+                 <input type="number" id="idP" name="idP" style="display: none" value="{{ p.idProject }}">
+                <input class="raport-project" type="submit" value="Raport">
+            </form></td>
+             </tr>
     {% endfor %}
 
 {% else %}
@@ -33,5 +46,5 @@
 {% endif %}
 </table>
 
-<a class="navbar-link" href="{% url 'polls:AddProjectAdmin' %}"><button>Add</button></a>
+<a class="navbar-link" href="{% url 'polls:AddProjectAdmin' %}"><button class="add-project">Add project</button></a>
 {% endblock %}

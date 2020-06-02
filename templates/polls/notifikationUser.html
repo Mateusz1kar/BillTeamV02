@@ -27,12 +27,12 @@
             <form action="{% url 'polls:notifikationDelee' %}" method="post">
         {% csrf_token %}
              <input type="number" id="id" name="id" style="display: none" value="{{ n.idNotification }}">
-            <input type="submit" value="Delete">
+            <input type="submit" value="Usuń">
         </form></td></tr>
     {% endfor %}
 
 {% else %}
-    <p>No polls are available.</p>
+    <p>Brak raportów czasu pracy</p>
 {% endif %}
        <h1>Godziny w obecnym miesiacu: {{sumHouersInMonth}}  </h1>
         <h2>Godziny w poprzednim miesiacu: {{sumHouersInLastMonth}}  </h2>
