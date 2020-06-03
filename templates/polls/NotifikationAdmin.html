@@ -15,9 +15,11 @@
 </script>
   <div class="container">
     <div class="jumbotron">
+           <h1>{{error}}</h1>
       {% if registered %}
         <h1>Czas pracy zarejestrowany</h1>
       {% else %}
+
         <h1>Formularz czasu pracy</h1>
         <h3>Wypełnij formularz i wyślij</h3>
 <form enctype="multipart/form-data" action="{% url 'polls:notifikationSend' %}" method="POST">

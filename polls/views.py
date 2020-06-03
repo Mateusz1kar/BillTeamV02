@@ -35,7 +35,7 @@ from reportlab.pdfbase  import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.lib.styles import getSampleStyleSheet
 from django.conf  import settings
-
+from django.db.models import F
 class PersonList(generic.ListView):
     template_name = 'polls/person.html'
     context_object_name = 'person'
@@ -267,32 +267,46 @@ def logout_view(request):
 
 
 def NotifikationForm(request):
+
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('polls:login'))
+
     else:
         registered = False
+        error = ""
         if request.method == 'POST':
             noti_form= NotificationAdd(data=request.POST)
-            if noti_form.is_valid():
+
+            #projekt = get_object_or_404(Project, idProject=6)
+
+            if (noti_form.is_valid() ):#& (projekt.state == "Aktywny")):
                 notifikation = noti_form.save(commit=False)
                 notifikation.who = request.user
                # notifikation.projectOwner = get_object_or_404(Project,idNotification=noti_form.data.projectOwner)
-                notifikation.save()
-                registered = True
+                test = notifikation.projectOwner.__str__()[16]  # .related_fields# .select_related(noti_form.fields)
+                project = get_object_or_404(Project, idProject=test)
+                if(project.state=="Aktywny"):
+                    notifikation.save()
+                    registered = True
+                else:
+                    error="Niestety ten projekt jest już zakończony"
             else:
                 print(noti_form.errors)
         else:
             noti_form = NotificationAdd()
         czyAdmin = get_object_or_404(Person, user=request.user).admin
+
         if(czyAdmin ):
             return render(request, 'polls/NotifikationAdmin.html',
                           {'noti_form': noti_form,
                            'registered': registered,
-                           'czyAdmin': czyAdmin})
+                           'czyAdmin': czyAdmin,
+                           'error': error})
         return render(request,'polls/notifikation.html',
                               {'noti_form':noti_form,
                                'registered':registered,
-                               'czyAdmin':czyAdmin})
+                               'czyAdmin':czyAdmin,
+                                'error': error})
 
 
 # class NotifikationUser(generic.ListView):
@@ -474,7 +488,10 @@ class  DetailProject(generic.DetailView):
 
 def ProjectDelExecute(request):
     project = get_object_or_404(Project, idProject=request.POST['idDel'])
-    project.delete()
+    if  project.state=="Zakonczony":
+        project.state = "Aktywny"
+    else: project.state ="Zakonczony"
+    project.save()
     return HttpResponseRedirect(reverse('polls:projectList'))
 
 

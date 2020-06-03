@@ -30,7 +30,7 @@
             <form action="{% url 'polls:projectDel' %}" method="post">
             {% csrf_token %}
                  <input type="number" id="idDel" name="idDel" style="display: none" value="{{ p.idProject }}">
-                <input class="delete-project" type="submit" value="Usuń">
+                 <input class="delete-project" type="submit" value="Zmień stan">
             </form></td>
          <td>
             <form action="{% url 'polls:raportProject' %}" method="post">
