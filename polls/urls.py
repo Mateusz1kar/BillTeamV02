@@ -38,7 +38,10 @@ urlpatterns = [
 
     path('NotifikationProject/', views.NotifikationProject, name='notifikationProject'),
     path('Raport/', views.EndMonthRaport, name='raportMont'),
-    path('RaportProjekt/',views.EndMonthProjectRaport,name='raportProject')
+    path('RaportProjekt/',views.EndMonthProjectRaport,name='raportProject'),
+
+    path('MojeProjekty/', views.ProjectUserOwner, name='ProjectOwned')
+
 ]
 
 

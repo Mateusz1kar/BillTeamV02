@@ -633,3 +633,15 @@ def EndMonthProjectRaport(request):
         # present the option to save the file.
         buffer.seek(0)
         return FileResponse(buffer, as_attachment=True, filename='hello.pdf')
+def ProjectUserOwner(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('polls:login'))
+    else:
+        projectList = Project.objects.filter(owner=request.user)
+        person = get_object_or_404(Person,user=request.user)
+        if person.admin:
+            return render(request, 'polls/UserOwnedProjectList.html',
+                          {'project': projectList})
+        else:
+            return render(request, 'polls/UseerOwnerProjectAdmin.html',
+                          {'project': projectList})
