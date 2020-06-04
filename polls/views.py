@@ -117,11 +117,18 @@ def personFormDeleteExecute(request):
         # Redisplay the question voting form.
         return render(request, 'polls/detailPerson.html', {
             'person': person2,
-            'error_message': "You didn't select a choice.",
+            'error_message': "Nie dokonałeś wyboru.",
         })
     else:
-
-        person2.delete()
+        if person2.position=="Dezaktywowany":
+            date =datetime.now()
+            if date.month==1 :
+                date.month=13
+                date.year-=1
+            person2.position = ""+ (datetime(date.year,date.month-1,28,23,59,59)).__str__()
+        else:
+            person2.position="Dezaktywowany"
+        person2.save()
         # Always return an HttpResponseRedirect after successfully dealing
         # with POST data. This prevents data from being posted twice if a
         # user hits the Back button.
@@ -208,7 +215,7 @@ def register(request):
 def login_handmade(request):
     # Like before, obtain the context for the user's request.
     context = RequestContext(request)
-
+    error=""
     er = []
 
     # If the request is a HTTP POST, try to pull out the relevant information.
@@ -220,45 +227,50 @@ def login_handmade(request):
             if user.is_active:
                 login(request, user)
                 person = get_object_or_404(Person, user=request.user)
-                notifikationList = Notification.objects.filter(who=person.id)
-                sumHouersInMonth = 0
-                sumHouersInLastMonth = 0
+                if person.position!="Dezaktywowany":
+                    notifikationList = Notification.objects.filter(who=person.id)
+                    sumHouersInMonth = 0
+                    sumHouersInLastMonth = 0
 
-                for n in notifikationList:
-                    if n.start_date.month == datetime.now().month:
-                        fmt = '%d/%m/%Y %H:%M'
-                        d1 = datetime.strptime(n.start_date.strftime(fmt), fmt)
-                        d2 = datetime.strptime(n.edn_date.strftime(fmt), fmt)
-                        sumHouersInMonth += (d2 - d1).seconds / 60 / 60  # * 24 *60 #.days
-                    if n.start_date.month == datetime.now().month - 1:
-                        fmt = '%d/%m/%Y %H:%M'
-                        d1 = datetime.strptime(n.start_date.strftime(fmt), fmt)
-                        d2 = datetime.strptime(n.edn_date.strftime(fmt), fmt)
-                        sumHouersInLastMonth += (d2 - d1).seconds / 60 / 60  # * 24 *60 #.days
-                if (person.admin):
-                    return render(request, 'polls/StartAdmin.html',
-                                  {'person': person,
-                                   'notifikation': notifikationList,
-                                   'sumHouersInMonth': sumHouersInMonth,
-                                   'sumHouersInLastMonth': sumHouersInLastMonth
-                                   })
+                    for n in notifikationList:
+                        if n.start_date.month == datetime.now().month:
+                            fmt = '%d/%m/%Y %H:%M'
+                            d1 = datetime.strptime(n.start_date.strftime(fmt), fmt)
+                            d2 = datetime.strptime(n.edn_date.strftime(fmt), fmt)
+                            sumHouersInMonth += (d2 - d1).seconds / 60 / 60  # * 24 *60 #.days
+                        if n.start_date.month == datetime.now().month - 1:
+                            fmt = '%d/%m/%Y %H:%M'
+                            d1 = datetime.strptime(n.start_date.strftime(fmt), fmt)
+                            d2 = datetime.strptime(n.edn_date.strftime(fmt), fmt)
+                            sumHouersInLastMonth += (d2 - d1).seconds / 60 / 60  # * 24 *60 #.days
+
+                    notifikationList = Notification.objects.filter(who=request.user,
+                                                                   start_date__gt=datetime(datetime.now().year,
+                                                                                           datetime.now().month, 1, 0, 0,
+                                                                                           1)).order_by("-start_date")
+                    if (person.admin):
+                        return render(request, 'polls/StartAdmin.html',
+                                      {'person': person,
+                                       'notifikation': notifikationList,
+                                       'sumHouersInMonth': sumHouersInMonth,
+                                       'sumHouersInLastMonth': sumHouersInLastMonth
+                                       })
+                    else:
+                        return render(request, 'polls/startUser.html',
+                                      {'person': person,
+                                       'notifikation': notifikationList,
+                                       'sumHouersInMonth': sumHouersInMonth,
+                                       'sumHouersInLastMonth': sumHouersInLastMonth
+                                       })
                 else:
-                    return render(request, 'polls/startUser.html',
-                                  {'person': person,
-                                   'notifikation': notifikationList,
-                                   'sumHouersInMonth': sumHouersInMonth,
-                                   'sumHouersInLastMonth': sumHouersInLastMonth
-                                   })
-            else:
-                # Return a 'disabled account' error message
-                #er.append("Twoje konto jest zablokowane")
-                return render(request,'polls/login.html')
-        else:
-            # Return an 'invalid login' error message.
-            #er.append("Bledne logowanie")
-            return render(request, 'polls/login.html')
+                    error="Konto zostało dezaktywowane prosze skontaktować się z administratorem"
 
-    return render(request,'polls/login.html')
+            else:
+                error = "Zły login lub chasło "
+        else:
+            error = "Nie można się zalogowac zły logoin lub hasło"
+
+    return render(request,'polls/login.html',{'error':error})
 
 
 def logout_view(request):
@@ -280,18 +292,25 @@ def NotifikationForm(request):
             #projekt = get_object_or_404(Project, idProject=6)
 
             if (noti_form.is_valid() ):#& (projekt.state == "Aktywny")):
-                notifikation = noti_form.save(commit=False)
-                notifikation.who = request.user
-               # notifikation.projectOwner = get_object_or_404(Project,idNotification=noti_form.data.projectOwner)
-                test = notifikation.projectOwner.__str__()[16]  # .related_fields# .select_related(noti_form.fields)
-                project = get_object_or_404(Project, idProject=test)
-                if(project.state=="Aktywny"):
-                    notifikation.save()
-                    registered = True
+                person = get_object_or_404(Person,user=request.user)
+                monthPom = person.position[5:7:1]
+                # if datetime.now().month<10 : warunke="0"+datetime.now().month.__str__()
+                # else :warunke= datetime.now().month.__str__()
+                if monthPom == datetime.now().strftime("%m"):
+                    error="Ten miesiąc został już zamknięty"
                 else:
-                    error="Niestety ten projekt jest już zakończony"
+                    notifikation = noti_form.save(commit=False)
+                    notifikation.who = request.user
+                   # notifikation.projectOwner = get_object_or_404(Project,idNotification=noti_form.data.projectOwner)
+                    test = notifikation.projectOwner.__str__()[16]  # .related_fields# .select_related(noti_form.fields)
+                    project = get_object_or_404(Project, idProject=test)
+                    if(project.state=="Aktywny"):
+                        notifikation.save()
+                        registered = True
+                    else:
+                        error="Niestety ten projekt jest już zakończony"
             else:
-                print(noti_form.errors)
+                error="Błędne dane formularza"
         else:
             noti_form = NotificationAdd()
         czyAdmin = get_object_or_404(Person, user=request.user).admin
@@ -337,8 +356,10 @@ def NotifikationUser(request):
                     d1 = datetime.strptime(n.start_date.strftime(fmt), fmt)
                     d2 = datetime.strptime(n.edn_date.strftime(fmt), fmt)
                     sumHouersInLastMonth += (d2 - d1).seconds / 60 / 60  # * 24 *60 #.days
+        notifikationList = Notification.objects.filter(who=request.POST['id'], start_date__gt=datetime(datetime.now().year,datetime.now().month,1, 0,0,1 ) ).order_by("-start_date")
+
         return render(request, 'polls/notifikationUser.html',
-                          {'notifikation': Notification.objects.filter(who=request.POST['id']).order_by('start_date'),
+                          {'notifikation': notifikationList,
                            'sumHouersInMonth':sumHouersInMonth,
                            'sumHouersInLastMonth':sumHouersInLastMonth
                            })
@@ -371,6 +392,7 @@ def notifikationFormDeleteExecute(request):
                 d1 = datetime.strptime(n.start_date.strftime(fmt), fmt)
                 d2 = datetime.strptime(n.edn_date.strftime(fmt), fmt)
                 sumHouersInLastMonth += (d2 - d1).seconds / 60 / 60  # * 24 *60 #.days
+        notifikationList = Notification.objects.filter(who=pom.id, start_date__gt=datetime(datetime.now().year,datetime.now().month,1, 0,0,1 ) ).order_by("-start_date")
         if pom.admin:
              return render(request, 'polls/notifikationUser.html',
                            {'person': pom,
@@ -402,9 +424,10 @@ def SartPage(request):
         return HttpResponseRedirect(reverse('polls:login'))
     else:
         person = get_object_or_404(Person, user=request.user)
-        notifikationList = Notification.objects.filter(who=person.id)
+        notifikationList = Notification.objects.filter(who=person.id).order_by("-start_date")
         sumHouersInMonth = 0
         sumHouersInLastMonth = 0
+
 
         for n in notifikationList:
             if n.start_date.month == datetime.now().month:
@@ -417,6 +440,10 @@ def SartPage(request):
                 d1 = datetime.strptime(n.start_date.strftime(fmt), fmt)
                 d2 = datetime.strptime(n.edn_date.strftime(fmt), fmt)
                 sumHouersInLastMonth += (d2 - d1).seconds / 60 / 60  # * 24 *60 #.days
+
+            # if n.start_date.month == datetime.now().month:
+        data = datetime.now()
+        notifikationList = Notification.objects.filter(who=person.id, start_date__gt=datetime(datetime.now().year,datetime.now().month,1, 0,0,1 ) ).order_by("-start_date")
         if( person.admin) :
             return render(request,'polls/StartAdmin.html',
                           {'person':person,
@@ -460,7 +487,7 @@ def NotifikationProject(request):
     else:
         if request.method == 'POST':
             return render(request, 'polls/ProjectDetail.html',
-                {'notifikation': Notification.objects.filter(projectOwner_id=request.POST['id']).order_by('start_date'),
+                {'notifikation': Notification.objects.filter(projectOwner_id=request.POST['id']).order_by('-start_date'),
                  'project': get_object_or_404(Project,idProject=request.POST['id'])})
 
 

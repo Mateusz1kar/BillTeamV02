@@ -7,7 +7,7 @@
           <h1>Witaj w aplikacji Time Manager</h1>
 <form action="{% url 'polls:login' %}" method="post">
 {% csrf_token %}
-
+    <h3><samp style="color: red">{{error}}</samp></h3>
     <label for="username">Wpisz login</label><br>
     <input type="text" id="login" name="username" ><br>
     <label for="password">Wpisz hasło</label><br>
