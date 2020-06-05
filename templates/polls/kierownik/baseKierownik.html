@@ -248,11 +248,11 @@
 
 
             <li><a class="navbar-brand" href="{% url 'polls:startpage' %}">Strona Główna</a></li>
-            <li><a class="navbar-link" href="{% url 'polls:register' %}">Stwórz konto</a></li>
-            <li><a class="navbar-link" href="{% url 'polls:personList' %}">Pracownicy</a></li>
+            <li><a class="navbar-link" href="{% url 'polls:personListKierownik' %}">Pracownicy</a></li>
             <li><a class="navbar-link" href="{% url 'polls:notifikationSend' %}">Formularz czasu pracy</a></li>
-            <li><a class="navbar-link" href="{% url 'polls:AddProjectAdmin' %}">Stwórz projekt</a></li>
-             <li><a class="navbar-link" href="{% url 'polls:projectList' %}">Lista projektów</a></li>
+<!--            <li><a class="navbar-link" href="{% url 'polls:AddProjectAdmin' %}">Stwórz projekt</a></li>-->
+             <li><a class="navbar-link" href="{% url 'polls:projectListKierownik' %}">Lista projektów</a></li>
+             <li><a class="navbar-link" href="{% url 'polls:ProjectOwned' %}">Moje projekty</a></li>
 
 
           {# Some logic on what to display for last item#}

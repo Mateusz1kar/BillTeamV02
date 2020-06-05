@@ -17,7 +17,7 @@ class Person(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     position = models.CharField(max_length=60)
     admin = models.BooleanField(default=False)
-
+    kierownik = models.BooleanField(default=False)
 
 class Project(models.Model):
     idProject = models.AutoField(primary_key=True)

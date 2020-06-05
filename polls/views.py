@@ -44,8 +44,22 @@ class PersonList(generic.ListView):
         if not self.request.user.is_authenticated:
             return HttpResponseRedirect(reverse('polls:login'))
         else:
+            person = get_object_or_404(Person,user=self.request.user)
+            if person.kierownik:
+                template_name = 'polls/kierownik/person.html'
             return Person.objects.order_by('user')
+class PersonListKieownik(generic.ListView):
+    template_name = 'polls/kierownik/personKierownik.html'
+    context_object_name = 'person'
 
+    def get_queryset(self):
+        if not self.request.user.is_authenticated:
+            return HttpResponseRedirect(reverse('polls:login'))
+        else:
+            person = get_object_or_404(Person,user=self.request.user)
+            if person.kierownik:
+                return Person.objects.order_by('user')
+            return ;
 
 
 def index (request):
@@ -62,6 +76,16 @@ class  DetailPerson(generic.DetailView):
             return HttpResponseRedirect(reverse('polls:login'))
         else:
             return Person.objects.order_by('idPerson')
+
+class DetailPersonKierownik(generic.DetailView):
+        template_name = 'polls/kierownik/detailPersonKierownik.html'
+        context_object_name = 'person'
+
+        def get_queryset(self):
+            if not self.request.user.is_authenticated:
+                return HttpResponseRedirect(reverse('polls:login'))
+            else:
+                return Person.objects.order_by('idPerson')
     #person = Person.objects.filter(idPerson=pk).first()
 
 
@@ -182,7 +206,15 @@ class ProjectList(generic.ListView):
         else:
           return Project.objects.all()
 
+class ProjectListKieronik(generic.ListView):
+    template_name = 'polls/kierownik/ProjectListKierownik.html'
+    context_object_name = 'project'
 
+    def get_queryset(self):
+        if not self.request.user.is_authenticated:
+            return HttpResponseRedirect(reverse('polls:login'))
+        else:
+          return Project.objects.all()
 
 
 
@@ -255,6 +287,13 @@ def login_handmade(request):
                                        'sumHouersInMonth': sumHouersInMonth,
                                        'sumHouersInLastMonth': sumHouersInLastMonth
                                        })
+                    elif person.kierownik:
+                        return render(request, 'polls/kierownik/StartKierownik.html',
+                                      {'person': person,
+                                       'notifikation': notifikationList,
+                                       'sumHouersInMonth': sumHouersInMonth,
+                                       'sumHouersInLastMonth': sumHouersInLastMonth
+                                       })
                     else:
                         return render(request, 'polls/startUser.html',
                                       {'person': person,
@@ -313,18 +352,24 @@ def NotifikationForm(request):
                 error="Błędne dane formularza"
         else:
             noti_form = NotificationAdd()
-        czyAdmin = get_object_or_404(Person, user=request.user).admin
+        person = get_object_or_404(Person, user=request.user)
 
-        if(czyAdmin ):
+        if(person.admin ):
             return render(request, 'polls/NotifikationAdmin.html',
                           {'noti_form': noti_form,
                            'registered': registered,
-                           'czyAdmin': czyAdmin,
+                           'czyAdmin': person.admin,
+                           'error': error})
+        elif person.kierownik:
+            return render(request, 'polls/kierownik/NotifikationKierownik.html',
+                          {'noti_form': noti_form,
+                           'registered': registered,
+                           'czyAdmin': person.admin,
                            'error': error})
         return render(request,'polls/notifikation.html',
                               {'noti_form':noti_form,
                                'registered':registered,
-                               'czyAdmin':czyAdmin,
+                               'czyAdmin':person.admin,
                                 'error': error})
 
 
@@ -393,13 +438,21 @@ def notifikationFormDeleteExecute(request):
                 d2 = datetime.strptime(n.edn_date.strftime(fmt), fmt)
                 sumHouersInLastMonth += (d2 - d1).seconds / 60 / 60  # * 24 *60 #.days
         notifikationList = Notification.objects.filter(who=pom.id, start_date__gt=datetime(datetime.now().year,datetime.now().month,1, 0,0,1 ) ).order_by("-start_date")
-        if pom.admin:
-             return render(request, 'polls/notifikationUser.html',
-                           {'person': pom,
-                            'notifikation': notifikationList,
-                            'sumHouersInMonth': sumHouersInMonth.__round__(2),
-                            'sumHouersInLastMonth': sumHouersInLastMonth.__round__(2)
-                            })
+        # if pom.admin:
+        #      return render(request, 'polls/notifikationUser.html',
+        #                    {'person': pom,
+        #                     'notifikation': notifikationList,
+        #                     'sumHouersInMonth': sumHouersInMonth.__round__(2),
+        #                     'sumHouersInLastMonth': sumHouersInLastMonth.__round__(2)
+        #                     })
+        # el
+        if(pom.kierownik):
+                return render(request, 'polls/notifikationUser.html',
+                              {'person': pom,
+                               'notifikation': notifikationList,
+                               'sumHouersInMonth': sumHouersInMonth.__round__(2),
+                               'sumHouersInLastMonth': sumHouersInLastMonth.__round__(2)
+                               })
         else:
 
             if (pom.admin):
@@ -449,10 +502,17 @@ def SartPage(request):
                           {'person':person,
                            'notifikation':notifikationList,
                            'sumHouersInMonth': sumHouersInMonth.__round__(2),
-                           'sumHouersInLastMonth':sumHouersInLastMonth.__round__(2)
+                           'sumHouersInLastMonth':sumHouersInLastMonth.__round__(2),
+                           'test':person.kierownik.__str__()
                            })
+        elif person.kierownik:
+            return render(request, 'polls/kierownik/StartKierownik.html',
+                   {'person': person,
+                    'notifikation': notifikationList,
+                    'sumHouersInMonth': sumHouersInMonth.__round__(2),
+                    'sumHouersInLastMonth': sumHouersInLastMonth.__round__(2),
+                    'test': person.kierownik.__str__()})
         else:
-
             return render(request,'polls/startUser.html',
                           {'person':person,
                            'notifikation':notifikationList,
@@ -519,7 +579,14 @@ def ProjectDelExecute(request):
         project.state = "Aktywny"
     else: project.state ="Zakonczony"
     project.save()
-    return HttpResponseRedirect(reverse('polls:projectList'))
+    person = get_object_or_404(Person,user=request.user)
+    if person.kierownik:
+        return HttpResponseRedirect(reverse('polls:projectListKierownik'))
+    elif person.admin:
+        return HttpResponseRedirect(reverse('polls:projectList'))
+    else:
+        return HttpResponseRedirect(reverse('polls:startpage'))
+
 
 
 def EndMonthRaport(request):

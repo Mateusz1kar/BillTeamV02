@@ -8,7 +8,9 @@ app_name = 'polls'
 urlpatterns = [
     path('',views.index,name='index'),
     path('PersonList/', views.PersonList.as_view(), name='personList'),
+    path('PersonListK/', views.PersonListKieownik.as_view(), name='personListKierownik'),
     path('DetailPerson/<int:pk>/', views.DetailPerson.as_view(), name='detailPerson'),
+    path('DetailPersonK/<int:pk>/', views.DetailPersonKierownik.as_view(), name='detailPersonKierownik'),
     # ex: /polls/5/results/
     path('DetailProject/<int:pk>/', views.DetailProject.as_view(), name='detailProject'),   #nie dzziała
     # ex: /polls/5/vote/
@@ -18,6 +20,7 @@ urlpatterns = [
     path('AddPersonFormExecute/', views.addPersonFormExecute, name='personAdd'),
 
     path('ProjectList/', views.ProjectList.as_view(), name='projectList'),
+    path('ProjectListK/', views.ProjectListKieronik.as_view(), name='projectListKierownik'),
     path('ProjektUsun/', views.ProjectDelExecute, name='projectDel'),
 
     #url(r'^register/$', views.register, name='register'),

@@ -1,0 +1,50 @@
+{% extends "polls/kierownik/baseKierownik.html" %}
+{#  load staticfiles %}#}
+{% block body_block %}
+<table>
+
+
+{% if project %}
+    <tr>
+      <th>Id</th>
+      <th>Nazwa</th>
+      <th>Opis</th>
+      <th>Właściciel projektu</th>
+      <th>Status</th>
+<!--      <th>Notification</th>-->
+    </tr>
+    <tr>
+    {% for p in project %}
+        <td>{{ p.idProject }}</td>
+         <td>{{ p.name }}</td>
+         <td>{{ p.description }}</td>
+         <td>{{ p.owner }}</td>
+         <td>{{ p.state }}</td>
+        <td>
+            <form action="{% url 'polls:notifikationProject' %}" method="post">
+            {% csrf_token %}
+                 <input type="number" id="id" name="id" style="display: none" value="{{ p.idProject }}">
+                <input type="submit" value="Raporty czasu pracy">
+            </form></td>
+        <td>
+            <form action="{% url 'polls:projectDel' %}" method="post">
+            {% csrf_token %}
+                 <input type="number" id="idDel" name="idDel" style="display: none" value="{{ p.idProject }}">
+                 <input class="delete-project" type="submit" value="Zmień stan">
+            </form></td>
+         <td>
+            <form action="{% url 'polls:raportProject' %}" method="post">
+            {% csrf_token %}
+                 <input type="number" id="idP" name="idP" style="display: none" value="{{ p.idProject }}">
+                <input class="raport-project" type="submit" value="Raport">
+            </form></td>
+             </tr>
+    {% endfor %}
+
+{% else %}
+    <p>No polls are available.</p>
+{% endif %}
+</table>
+
+<a class="navbar-link" href="{% url 'polls:AddProjectAdmin' %}"><button class="add-project">Add project</button></a>
+{% endblock %}

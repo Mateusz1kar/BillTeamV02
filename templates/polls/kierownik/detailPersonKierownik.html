@@ -1,0 +1,27 @@
+{% extends "polls/kierownik/baseKierownik.html" %}
+{#  load staticfiles %}#}
+{% block body_block %}
+<h1>{{ person.user.first_name}} {{person.user.last_name }}</h1>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+<h3>Id: {{ person.id }}</h3>
+<h3>Imie: {{ person.user.first_name }}</h3>
+<h3>Nazwisko: {{  person.user.last_name }}</h3>
+<h3>Typ urzytkownika: {% if person.admin %} admin  {% elif person.kierownik %}keirownik  {% else %} Urzytkownik {% endif %}</h3>
+<h3>Status: {{ person.position }}</h3>
+
+
+
+    <form action="{% url 'polls:notifikationUser' %}" method="post">
+        {% csrf_token %}
+             <input type="number" id="idN" name="id" style="display: none" value="{{ person.id }}">
+            <input type="submit" value="Raporty">
+        </form>
+ <form action="{% url 'polls:raportMont' %}" method="post">
+        {% csrf_token %}
+             <input type="number" id="idP" name="idP" style="display: none" value="{{ person.id }}">
+            <input type="submit" value="Raport Miesięczny">
+        </form>
+
+
+{% endblock %}
