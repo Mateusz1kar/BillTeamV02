@@ -4,6 +4,7 @@
 <h1>Strona Główna</h1>
 <div class="container">
 <h2>{{ person.user.first_name }} {{  person.user.last_name }}</h2>
+      <h2>Status: {{person.position}}</h2>
      <h3>Twoje raporty czasu pracy</h3>
    <table>
   <tr>
@@ -38,5 +39,6 @@
        <h1>Godziny w obecnym miesiacu: {{sumHouersInMonth}}  </h1>
     <h2>Godziny w poprzednim miesiacu: {{sumHouersInLastMonth}}  </h2>
      <div><a class="raports" style="margin-top: 50px; margin-bottom: 50px; display: inline-block; color: #0be53e; padding: 20px; background: #0c9915; color: #fff; border-radius: 15px; font-weight: 500; text-transform: uppercase; letter-spacing: 2px; font-size: 18px; box-shadow: 6px 10px 58px -13px rgba(0,0,0,0.32);" href="{% url 'polls:raportMont' %}">Zakończenie miesiąca (wygeneruj raport)</a></div>
+     <div><a class="raports" style="margin-top: 50px; margin-bottom: 50px; display: inline-block; color: #0be53e; padding: 20px; background: #0c9915; color: #fff; border-radius: 15px; font-weight: 500; text-transform: uppercase; letter-spacing: 2px; font-size: 18px; box-shadow: 6px 10px 58px -13px rgba(0,0,0,0.32);" href="{% url 'polls:endMontRequest' %}">Zgłoś zamknęcie miesiąca</a></div>
 </div>
 {% endblock %}

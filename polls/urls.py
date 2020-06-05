@@ -7,10 +7,10 @@ app_name = 'polls'
 
 urlpatterns = [
     path('',views.index,name='index'),
-    path('PersonList/', views.PersonList.as_view(), name='personList'),
-    path('PersonListK/', views.PersonListKieownik.as_view(), name='personListKierownik'),
-    path('DetailPerson/<int:pk>/', views.DetailPerson.as_view(), name='detailPerson'),
-    path('DetailPersonK/<int:pk>/', views.DetailPersonKierownik.as_view(), name='detailPersonKierownik'),
+    path('PersonList/', views.PersonList, name='personList'),
+    # path('PersonListK/', views.PersonListKieownik.as_view(), name='personListKierownik'),
+    path('DetailPerson/<int:pk>/', views.DetailPerson, name='detailPerson'),
+    # path('DetailPersonK/<int:pk>/', views.DetailPersonKierownik.as_view(), name='detailPersonKierownik'),
     # ex: /polls/5/results/
     path('DetailProject/<int:pk>/', views.DetailProject.as_view(), name='detailProject'),   #nie dzziała
     # ex: /polls/5/vote/
@@ -41,7 +41,11 @@ urlpatterns = [
 
     path('NotifikationProject/', views.NotifikationProject, name='notifikationProject'),
     path('Raport/', views.EndMonthRaport, name='raportMont'),
-    path('RaportProjekt/',views.EndMonthProjectRaport,name='raportProject'),
+    path('RaportProjekt/', views.EndMonthProjectRaport, name='raportProject'),
+
+    path('WyslijDoZatwierdzenia/', views.EndMonhRequest, name='endMontRequest'),
+    path('Zatwierdz/', views.EndMonth, name='endMonth'),
+    path('CofnijZatwierdzenie/', views.delEndMonhRequest, name='delEndMontReques'),
 
     path('MojeProjekty/', views.ProjectUserOwner, name='ProjectOwned')
 

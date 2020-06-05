@@ -21,7 +21,7 @@
          <td>{{ p.user.username }}</td>
          <td>{{ p.position }}</td>
          <td>{{ p.admin }}</td>
-        <td><a href="{% url 'polls:detailPersonKierownik'  p.id %}"><button class="show-person" value="Wyswietl">Wyswietl</button> </a></td></tr>
+        <td><a href="{% url 'polls:detailPerson'  p.id %}"><button class="show-person" value="Wyswietl">Wyswietl</button> </a></td></tr>
     {% endfor %}
 
 {% else %}

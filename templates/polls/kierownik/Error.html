@@ -1,0 +1,9 @@
+{% extends "polls/kierownik/baseKierownik.html" %}
+{#  load staticfiles %}#}
+{% block body_block %}
+<h1>{{ person.user.first_name}} {{person.user.last_name }}</h1>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+<h1 style="color: red">{{error}}</h1>
+
+{% endblock %}

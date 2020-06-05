@@ -29,16 +29,16 @@
      <input type="text" id="id" name="id" style="display: none" value="{{ person.id }}">
     <input type="submit" value="Usuń">
 </form>
-    <form action="{% url 'polls:notifikationUser' %}" method="post">
-        {% csrf_token %}
-             <input type="number" id="idN" name="id" style="display: none" value="{{ person.id }}">
-            <input type="submit" value="Raporty">
-        </form>
- <form action="{% url 'polls:raportMont' %}" method="post">
-        {% csrf_token %}
-             <input type="number" id="idP" name="idP" style="display: none" value="{{ person.id }}">
-            <input type="submit" value="Raport Miesięczny">
-        </form>
+<!--    <form action="{% url 'polls:notifikationUser' %}" method="post">-->
+<!--        {% csrf_token %}-->
+<!--             <input type="number" id="idN" name="id" style="display: none" value="{{ person.id }}">-->
+<!--            <input type="submit" value="Raporty">-->
+<!--        </form>-->
+<!-- <form action="{% url 'polls:raportMont' %}" method="post">-->
+<!--        {% csrf_token %}-->
+<!--             <input type="number" id="idP" name="idP" style="display: none" value="{{ person.id }}">-->
+<!--            <input type="submit" value="Raport Miesięczny">-->
+<!--        </form>-->
 
 
 {% endblock %}

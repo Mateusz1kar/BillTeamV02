@@ -19,6 +19,7 @@ class Person(models.Model):
     admin = models.BooleanField(default=False)
     kierownik = models.BooleanField(default=False)
 
+
 class Project(models.Model):
     idProject = models.AutoField(primary_key=True)
     name = models.CharField(max_length=50)

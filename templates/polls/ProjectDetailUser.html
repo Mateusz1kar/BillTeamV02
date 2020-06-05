@@ -1,0 +1,48 @@
+ProjectDetail.html{% extends "polls/baseUser.html" %}
+{#  load staticfiles %}#}
+{% block body_block %}
+
+ <div class="container">
+    <h2>Nazwa Projektu: {{project.name}}</h2>
+    <p>
+        Opis projektu: {{project.description}}
+    </p>
+    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+<table>
+
+{% if notifikation.count > 0  %}
+
+  <tr>
+      <th>Kto raportował</th>
+      <th>Co zrobił</th>
+      <th>Projekt</th>
+      <th>Czas rozpoczęcia</th>
+      <th>Czas zakończenia</th>
+      <th>Usunąć?</th>
+  </tr>
+    <tr>
+    {% for n in notifikation %}
+         <td>{{ n.who }}</td>
+         <td>{{ n.what }}</td>
+         <td>{{ n.projectOwner }}</td>
+         <td>{{ n.start_date }}</td>
+        <td>{{ n.edn_date }}</td>
+        <td>
+            <form action="{% url 'polls:notifikationDelee' %}" method="post">
+        {% csrf_token %}
+             <input type="number" id="id" name="id" style="display: none" value="{{ n.idNotification }}">
+            <input type="submit" value="Usuń">
+        </form></td></tr>
+    {% endfor %}
+
+{% else %}
+    <p>Brak raportów czasu pracy</p>
+{% endif %}
+</table>
+  </div>
+
+
+
+
+
+{% endblock %}

@@ -36,56 +36,91 @@ from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.lib.styles import getSampleStyleSheet
 from django.conf  import settings
 from django.db.models import F
-class PersonList(generic.ListView):
+# class PersonList(generic.ListView):
+#     template_name = 'polls/person.html'
+#     context_object_name = 'person'
+#
+#     def get_queryset(self):
+#         if not self.request.user.is_authenticated:
+#             return HttpResponseRedirect(reverse('polls:login'))
+#         else:
+#             person = get_object_or_404(Person,user=self.request.user)
+#             if person.kierownik:
+#                 template_name = 'polls/kierownik/person.html'
+#             return {'project':Person.objects.order_by('idPerson'),'error':""}
+
+def PersonList(request):
     template_name = 'polls/person.html'
     context_object_name = 'person'
 
-    def get_queryset(self):
-        if not self.request.user.is_authenticated:
-            return HttpResponseRedirect(reverse('polls:login'))
-        else:
-            person = get_object_or_404(Person,user=self.request.user)
-            if person.kierownik:
-                template_name = 'polls/kierownik/person.html'
-            return Person.objects.order_by('user')
-class PersonListKieownik(generic.ListView):
-    template_name = 'polls/kierownik/personKierownik.html'
-    context_object_name = 'person'
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('polls:login'))
+    else:
+        person = get_object_or_404(Person,user=request.user)
+        if person.kierownik:
+            template_name = 'polls/kierownik/personKierownik.html'
+            return  render(request,template_name,{'person':Person.objects.order_by('id'),'error':""})
+        elif person.admin:
+             template_name = 'polls//person.html'
+             return render(request, template_name, {'person': Person.objects.order_by('id'), 'error': ""})
+        return HttpResponseRedirect(reverse('polls:startpage'))
 
-    def get_queryset(self):
-        if not self.request.user.is_authenticated:
-            return HttpResponseRedirect(reverse('polls:login'))
-        else:
-            person = get_object_or_404(Person,user=self.request.user)
-            if person.kierownik:
-                return Person.objects.order_by('user')
-            return ;
+
+# class PersonListKieownik(generic.ListView):
+#     template_name = 'polls/kierownik/personKierownik.html'
+#     context_object_name = 'person'
+#
+#     def get_queryset(self):
+#         if not self.request.user.is_authenticated:
+#             return HttpResponseRedirect(reverse('polls:login'))
+#         else:
+#             person = get_object_or_404(Person,user=self.request.user)
+#             if person.kierownik:
+#                 return Person.objects.order_by('user')
+#             return ;
 
 
 def index (request):
     return HttpResponse("Hello, world. You're at the polls index.")
 
-
-
-class  DetailPerson(generic.DetailView):
+def  DetailPerson(request,**kwargs):
     template_name = 'polls/detailPerson.html'
     context_object_name = 'person'
-
-    def get_queryset(self):
-        if not self.request.user.is_authenticated:
-            return HttpResponseRedirect(reverse('polls:login'))
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('polls:login'))
+    else:
+        person = get_object_or_404(Person,user=request.user)
+        if person.kierownik:
+            template_name='polls/kierownik/detailPersonKierownik.html'
+            p=get_object_or_404(Person,id=kwargs['pk'])
+            return render(request, template_name, {'person':p, 'error':""})
+        elif person.admin:
+            template_name = 'polls//detailPerson.html'
+            p = get_object_or_404(Person, id=kwargs['pk'])
+            return render(request, template_name, {'person': p, 'error': ""})
         else:
-            return Person.objects.order_by('idPerson')
+            return HttpResponseRedirect(reverse('polls:startpage'))
 
-class DetailPersonKierownik(generic.DetailView):
-        template_name = 'polls/kierownik/detailPersonKierownik.html'
-        context_object_name = 'person'
 
-        def get_queryset(self):
-            if not self.request.user.is_authenticated:
-                return HttpResponseRedirect(reverse('polls:login'))
-            else:
-                return Person.objects.order_by('idPerson')
+# class  DetailPerson(generic.DetailView):
+#     template_name = 'polls/detailPerson.html'
+#     context_object_name = 'person'
+#
+#     def get_queryset(self):
+#         if not self.request.user.is_authenticated:
+#             return HttpResponseRedirect(reverse('polls:login'))
+#         else:
+#             return Person.objects.order_by('idPerson')
+#
+# class DetailPersonKierownik(generic.DetailView):
+#         template_name = 'polls/kierownik/detailPersonKierownik.html'
+#         context_object_name = 'person'
+#
+#         def get_queryset(self):
+#             if not self.request.user.is_authenticated:
+#                 return HttpResponseRedirect(reverse('polls:login'))
+#             else:
+#                 return Person.objects.order_by('idPerson')
     #person = Person.objects.filter(idPerson=pk).first()
 
 
@@ -149,7 +184,7 @@ def personFormDeleteExecute(request):
             if date.month==1 :
                 date.month=13
                 date.year-=1
-            person2.position = ""+ (datetime(date.year,date.month-1,28,23,59,59)).__str__()
+            person2.position = ""+ (datetime(date.year,date.month-1,28)).strftime("%Y-%m")+" = Zatwierdzony"
         else:
             person2.position="Dezaktywowany"
         person2.save()
@@ -333,10 +368,15 @@ def NotifikationForm(request):
             if (noti_form.is_valid() ):#& (projekt.state == "Aktywny")):
                 person = get_object_or_404(Person,user=request.user)
                 monthPom = person.position[5:7:1]
+                pomCzyPrzeslanyDoZamkniecia=person.position[8:]
                 # if datetime.now().month<10 : warunke="0"+datetime.now().month.__str__()
                 # else :warunke= datetime.now().month.__str__()
                 if monthPom == datetime.now().strftime("%m"):
                     error="Ten miesiąc został już zamknięty"
+                elif pomCzyPrzeslanyDoZamkniecia==" = Zatwierdzony" & monthPom==datetime.now().strftime("%m"):
+                    error = "Ten miesiąc został już zamknięty"
+                elif pomCzyPrzeslanyDoZamkniecia=="= Do zatwierdzenia":
+                    error = "Ten miesiąc został już przesłany do zatwierdzenie nie można wykonać tej operacji"
                 else:
                     notifikation = noti_form.save(commit=False)
                     notifikation.who = request.user
@@ -372,7 +412,86 @@ def NotifikationForm(request):
                                'czyAdmin':person.admin,
                                 'error': error})
 
+def EndMonth(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('polls:login'))
+    else:
+        if request.method == 'POST':
+            person= get_object_or_404(Person,user=request.POST['idEndR'])
+            monthPom = person.position[5:7:1]
+            pomCzyPrzeslanyDoZamkniecia = person.position[8:]
+            if person.position != "Dezaktywowany":
+                if pomCzyPrzeslanyDoZamkniecia == "= Do zatwierdzenia":
+                    date = datetime.now()
+                    if date.month == 1:
+                        date.month = 13
+                        date.year -= 1
+                    person.position = "" + (datetime(date.year, date.month , 28)).strftime("%Y-%m") + " = Zatwierdzony"
+                    person.save()
+                    if person.kierownik:
+                        template_name = 'polls/kierownik/detailPersonKierownik.html'
+                        return render(request, template_name, {'person': person, 'error': ""})
+                    else:
+                        return HttpResponseRedirect(reverse('polls:startpage'))
 
+
+                else:
+                    error = "Ten miesiąc nie został jeszcze przesłany do zatwierdzenie nie można wykonać tej operacji "+pomCzyPrzeslanyDoZamkniecia
+            else:
+                error = "Ten urzytkownik jest dezaktywowany nie można wykonac operacji"
+        else:
+            error = "Zła metoda dostępu"
+    return render(request, 'polls/kierownik/Error.html', {'error': error})
+
+
+
+
+def EndMonhRequest(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('polls:login'))
+    else:
+        person= get_object_or_404(Person,user=request.user)
+        monthPom = person.position[5:7:1]
+        pomCzyPrzeslanyDoZamkniecia = person.position[8:]
+        if person.position != "Dezaktywowany":
+            if pomCzyPrzeslanyDoZamkniecia != "= Do zatwierdzenia":
+                date = datetime.now()
+                person.position = "" + (datetime(date.year, date.month , 28)).strftime("%Y-%m") + " = Do zatwierdzenia"
+                person.save()
+                return HttpResponseRedirect(reverse('polls:startpage'))
+
+            else:
+                error = "Ten miesiąc już zsotał przesłany do zatwierdzenia"
+        else:
+            error = "Ten urzytkownik jest dezaktywowany nie można wykonac operacji"
+        return render(request, 'polls/kierownik/Error.html', {'error': error})
+
+def delEndMonhRequest(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('polls:login'))
+    else:
+        person= get_object_or_404(Person,user=request.user)
+        monthPom = person.position[5:7:1]
+        pomCzyPrzeslanyDoZamkniecia = person.position[8:]
+        if person.position != "Dezaktywowany":
+            if pomCzyPrzeslanyDoZamkniecia == "= Do zatwierdzenia":
+                date = datetime.now()
+                person.position = "" + (datetime(date.year, date.month-1 , 28)).strftime("%Y-%m") + " = Zatwierdzony"
+                person.save()
+                return HttpResponseRedirect(reverse('polls:startpage'))
+
+            else:
+                error = "Ten miesiąc nie zsotał przesłany do zatwierdzenia"
+                if person.admin:
+                    return  render(request,'polls/ErrorAdmin.html', {'error': error})
+                elif person.kierownik:
+                    return render(request, 'polls/kierownik/Error.html', {'error': error})
+                else:
+                    return render(request, 'polls/ErrorUser.html', {'error': error})
+        else:
+            error = "Ten urzytkownik jest dezaktywowany nie można wykonac operacji"
+
+        return render(request, 'polls/login.html')
 # class NotifikationUser(generic.ListView):
 #     template_name = 'polls/notifikationUser.html'
 #     context_object_name = 'notifikation'
@@ -546,7 +665,14 @@ def NotifikationProject(request):
         return HttpResponseRedirect(reverse('polls:login'))
     else:
         if request.method == 'POST':
-            return render(request, 'polls/ProjectDetail.html',
+            person = get_object_or_404(Person,user=request.user)
+            if person.kierownik:
+                tempalte= "polls/ProjectDetail.html"
+            elif person.admin:
+                tempalte = "polls/ProjectDetailAdmin.html"
+            else:
+                tempalte = "polls/ProjectDetailUser.html"
+            return render(request, tempalte,
                 {'notifikation': Notification.objects.filter(projectOwner_id=request.POST['id']).order_by('-start_date'),
                  'project': get_object_or_404(Project,idProject=request.POST['id'])})
 
@@ -582,10 +708,7 @@ def ProjectDelExecute(request):
     person = get_object_or_404(Person,user=request.user)
     if person.kierownik:
         return HttpResponseRedirect(reverse('polls:projectListKierownik'))
-    elif person.admin:
-        return HttpResponseRedirect(reverse('polls:projectList'))
-    else:
-        return HttpResponseRedirect(reverse('polls:startpage'))
+    return HttpResponseRedirect(reverse('polls:ProjectOwned'))
 
 
 
@@ -708,6 +831,9 @@ def ProjectUserOwner(request):
         person = get_object_or_404(Person,user=request.user)
         if person.admin:
             return render(request, 'polls/UserOwnedProjectList.html',
+                          {'project': projectList})
+        elif person.kierownik:
+            return render(request, 'polls/kierownik/UserOwnedProjectListKierownik.html',
                           {'project': projectList})
         else:
             return render(request, 'polls/UseerOwnerProjectAdmin.html',
