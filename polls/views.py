@@ -284,26 +284,34 @@ def register(request):
     else:
         registered = False
         if request.method == 'POST':
-            user_form = SignUpForm(data=request.POST)
-            profile_form = UserProfileInfoForm(data=request.POST)
-            if user_form.is_valid() and profile_form.is_valid():
-                user = user_form.save()
-                user.set_password(user.password)
-                user.save()
-                profile = profile_form.save(commit=False)
-                if profile.admin & profile.kierownik:
-                    profile.admin = True
-                    profile.kierownik = False
-                date = datetime.now()
-                if date.month == 1:
-                    date.month = 13
-                    date.year -= 1
-                profile.position = "" + (datetime(date.year, date.month-1, 28)).strftime("%Y-%m") + " = Zatwierdzony"
-                profile.user = user
-                profile.save()
-                registered = True
+            person = get_object_or_404(Person,user=request.user)
+            if( person.admin):
+                user_form = SignUpForm(data=request.POST)
+                profile_form = UserProfileInfoForm(data=request.POST)
+                if user_form.is_valid() and profile_form.is_valid():
+                    user = user_form.save()
+                    user.set_password(user.password)
+                    user.save()
+                    profile = profile_form.save(commit=False)
+                    if profile.admin & profile.kierownik:
+                        profile.admin = True
+                        profile.kierownik = False
+                    date = datetime.now()
+                    if date.month == 1:
+                        date.month = 13
+                        date.year -= 1
+                    profile.position = "" + (datetime(date.year, date.month-1, 28)).strftime("%Y-%m") + " = Zatwierdzony"
+                    profile.user = user
+                    profile.save()
+                    registered = True
+                else:
+                    print(user_form.errors,profile_form.errors)
             else:
-                print(user_form.errors,profile_form.errors)
+                if person.kierownik:
+                    template='polls/kierownik/Error.html'
+                else:
+                    template= 'polls/ErrorUser.html'
+                return render(request,template,{'error':"Brak uprawnień administratora"})
         else:
             user_form = SignUpForm()
             profile_form = UserProfileInfoForm()
@@ -416,9 +424,12 @@ def NotifikationForm(request):
                    # notifikation.projectOwner = get_object_or_404(Project,idNotification=noti_form.data.projectOwner)
                     test = notifikation.projectOwner.__str__()[16]  # .related_fields# .select_related(noti_form.fields)
                     project = get_object_or_404(Project, idProject=test)
-                    if(project.state=="Aktywny"):
-                        notifikation.save()
-                        registered = True
+                    if(project.state=="Aktywny") :
+                        if  notifikation.start_date < notifikation.edn_date:
+                            notifikation.save()
+                            registered = True
+                        else:
+                            error= "Bład daty"
                     else:
                         error="Niestety ten projekt jest już zakończony"
             else:
