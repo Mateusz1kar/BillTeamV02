@@ -18,23 +18,24 @@
       <th>Projekt</th>
       <th>Czas rozpoczęcia</th>
       <th>Czas zakończenia</th>
-      <th>Usunąć?</th>
+<!--      <th>Usunąć?</th>-->
   </tr>
     <tr>
     {% for n in notifikation %}
          <td>{{ n.who }}</td>
          <td>{{ n.what }}</td>
-         <td>{{ n.projectOwner }}</td>
+         <td>{{ n.projectOwner.name }}</td>
          <td>{{ n.start_date }}</td>
         <td>{{ n.edn_date }}</td>
-        <td>
-            <form  enctype="multipart/form-data" action="{% url 'polls:notifikationDelee' %}" method="post">
-        {% csrf_token %}
-              <input type="text" id="typ" name="typ" style="display: none" value="projekt">
-             <input type="number" id="id" name="id" style="display: none" value="{{ n.idNotification }}">
-                  <input type="text" id="idP" name="idP" style="display: none" value="{{ n.projectOwner }}">
-            <input type="submit" value="Usuń">
-        </form></td></tr>
+<!--        <td>-->
+<!--            <form  enctype="multipart/form-data" action="{% url 'polls:notifikationDelee' %}" method="post">-->
+<!--        {% csrf_token %}-->
+<!--              <input type="text" id="typ" name="typ" style="display: none" value="projekt">-->
+<!--             <input type="number" id="id" name="id" style="display: none" value="{{ n.idNotification }}">-->
+<!--                  <input type="text" id="idP" name="idP" style="display: none" value="{{ n.projectOwner }}">-->
+<!--            <input type="submit" value="Usuń">-->
+<!--        </form></td></tr>-->
+        </tr>
     {% endfor %}
 
 {% else %}

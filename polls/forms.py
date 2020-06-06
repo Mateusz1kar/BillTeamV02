@@ -42,16 +42,9 @@ class UserProfileInfoForm(forms.ModelForm):
 class NotificationAdd(forms.ModelForm):
     what = forms.CharField(max_length=30, required=True, label="Opis")
     #projectOwner = forms.CharField(max_length=30, required=False, help_text='Optional.')
-
     projectOwner = forms.NumberInput()
-
-
     start_date = forms.DateTimeField(input_formats=['%d/%m/%Y %H:%M:%S', '%d/%m/%Y %H:%M'],label="Czas rozpoczęcia")
     edn_date = forms.DateTimeField(input_formats=['%d/%m/%Y %H:%M:%S', '%d/%m/%Y %H:%M'],label="Czas zakończenia")
-
-
-
-
     #start_date = forms.DateTimeField(input_formats=['%d/%m/%Y %H:%M'])
 
     #end_date = forms.DateTimeField(input_formats=['%d/%m/%Y %H:%M'])

@@ -675,6 +675,7 @@ def SartPage(request):
             # if n.start_date.month == datetime.now().month:
         data = datetime.now()
         notifikationList = Notification.objects.filter(who=person.id, start_date__gt=datetime(datetime.now().year,datetime.now().month,1, 0,0,1 ) ).order_by("-start_date")
+
         if( person.admin) :
             return render(request,'polls/StartAdmin.html',
                           {'person':person,
@@ -682,6 +683,7 @@ def SartPage(request):
                            'sumHouersInMonth': sumHouersInMonth.__round__(2),
                            'sumHouersInLastMonth':sumHouersInLastMonth.__round__(2),
                            'test':person.kierownik.__str__()
+
                            })
         elif person.kierownik:
             return render(request, 'polls/kierownik/StartKierownik.html',
