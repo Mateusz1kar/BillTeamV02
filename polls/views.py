@@ -625,6 +625,11 @@ def notifikationFormDeleteExecute(request):
                                   '-start_date'),
                                'project': get_object_or_404(Project, idProject=request.POST['idP'][16])})
             else:
+                if request.POST['typ'] == "projekt":
+                    tempalte = "polls/ProjectDetailUser.html"
+                    return render(request, tempalte,
+                                  {'notifikation': Notification.objects.filter(projectOwner_id=request.POST['idP'][16]).order_by('-start_date'),
+                                      'project': get_object_or_404(Project, idProject=request.POST['idP'][16])})
                 return render(request, 'polls/startUser.html',
                               {'person': pom,
                                'notifikation': notifikationList,
@@ -754,6 +759,18 @@ def ProjectDelExecute(request):
     return HttpResponseRedirect(reverse('polls:ProjectOwned'))
 
 
+def myProjectKierownikDel(request):
+    project = get_object_or_404(Project, idProject=request.POST['idDel'])
+    if project.state == "Zakonczony":
+        project.state = "Aktywny"
+    else:
+        project.state = "Zakonczony"
+    project.save()
+    template_name = 'polls/kierownik/UserOwnedProjectListKierownik.html'
+    projectList = Project.objects.filter(owner=request.user)
+    return render(request,template_name,{'project':projectList})
+
+
 
 def EndMonthRaport(request):
     if request.method =='POST':
@@ -873,11 +890,11 @@ def ProjectUserOwner(request):
         projectList = Project.objects.filter(owner=request.user)
         person = get_object_or_404(Person,user=request.user)
         if person.admin:
-            return render(request, 'polls/UserOwnedProjectList.html',
+            return render(request, 'polls/UserOwnerProjectAdmin.html',
                           {'project': projectList})
         elif person.kierownik:
             return render(request, 'polls/kierownik/UserOwnedProjectListKierownik.html',
                           {'project': projectList})
         else:
-            return render(request, 'polls/UseerOwnerProjectAdmin.html',
+            return render(request, 'polls/UserOwnedProjectList.html',
                           {'project': projectList})

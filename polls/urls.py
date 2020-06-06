@@ -21,7 +21,9 @@ urlpatterns = [
 
     path('ProjectList/', views.ProjectList.as_view(), name='projectList'),
     path('ProjectListK/', views.ProjectListKieronik.as_view(), name='projectListKierownik'),
+    path('ProjectListK/', views.ProjectListKieronik.as_view(), name='projectListKierownik'),
     path('ProjektUsun/', views.ProjectDelExecute, name='projectDel'),
+    path('ProjektUsunK/', views.myProjectKierownikDel, name='projectDelK'),
 
     #url(r'^register/$', views.register, name='register'),
     #url(r'^login/$', auth_views.LoginView, name='login'),

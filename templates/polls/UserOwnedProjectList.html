@@ -1,4 +1,4 @@
-{% extends "polls/base.html" %}
+{% extends "polls/baseUser.html" %}
 {#  load staticfiles %}#}
 {% block body_block %}
 <table>
@@ -23,7 +23,9 @@
         <td>
             <form action="{% url 'polls:notifikationProject' %}" method="post">
             {% csrf_token %}
+
                  <input type="number" id="id" name="id" style="display: none" value="{{ p.idProject }}">
+
                 <input type="submit" value="Raporty czasu pracy">
             </form></td>
         <td>

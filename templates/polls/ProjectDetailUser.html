@@ -31,6 +31,7 @@ ProjectDetail.html{% extends "polls/baseUser.html" %}
             <form action="{% url 'polls:notifikationDelee' %}" method="post">
         {% csrf_token %}
               <input type="text" id="typ" name="typ" style="display: none" value="projekt">
+                 <input type="text" id="idP" name="idP" style="display: none" value="{{ n.projectOwner }}">
              <input type="number" id="id" name="id" style="display: none" value="{{ n.idNotification }}">
             <input type="submit" value="Usuń">
         </form></td></tr>
