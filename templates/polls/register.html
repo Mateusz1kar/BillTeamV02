@@ -11,6 +11,8 @@
 <form enctype="multipart/form-data" action="{% url 'polls:register' %}" method="POST">
           {% csrf_token %}
           {{ user_form.as_p }}
+    <h3>Dodatkowe uprawnienia:</h3>
+    <p>wybranie obu przypisze uprawnienia administratora</p>
           {{ profile_form.as_p }}
           <input type="submit" name="" value="Zarejestruj">
         </form>

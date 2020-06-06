@@ -16,10 +16,14 @@
     <input type="text" id="login" name="login" value="{{ person.user.username}}"><br>
     <label for="password">Hasło</label><br>
     <input type="password" id="password" name="password" value=""><br>
-    <label for="position">Stanowisko</label><br>
-    <input type="text" id="position" name="position" value="{{ person.position }}"><br>
+<!--    <label for="position">Stanowisko</label><br>-->
+<!--    <input type="text" id="position" name="position" value="{{ person.position }}"><br>-->
+    <h3>Dodatkowe uprawnienia:</h3>
+    <p>wybranie obu przypisze uprawnienia administratora</p>
     <label for="czyA">Admin</label>
     <input type="checkbox" id="czyA" name="czyA" {% if person.admin %} checked {% endif %}><br><br>
+    <label for="czyK">Kierownik</label>
+    <input type="checkbox" id="czyK" name="czyK" {% if person.kierownik %} checked {% endif %}><br><br>
     <input type="submit" value="Zaktualizuj">
 </form>
 

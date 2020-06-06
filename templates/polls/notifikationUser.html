@@ -26,6 +26,7 @@
         <td>
             <form action="{% url 'polls:notifikationDelee' %}" method="post">
         {% csrf_token %}
+                 <input type="number" id="typ" name="typ" style="display: none" value="user">
              <input type="number" id="id" name="id" style="display: none" value="{{ n.idNotification }}">
             <input type="submit" value="Usuń">
         </form></td></tr>

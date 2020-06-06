@@ -144,14 +144,27 @@ def personFormExecute(request):
             ex = "nie zmieniono hasła"
 
         #person2.password = request.POST['password']
-        person2.position = request.POST['position']
+        # person2.position = request.POST['position']
         #pom = False
         try:
             if (request.POST['czyA']):
                 pom = True
         except:
             pom = False
+
+        try:
+            if (request.POST['czyK']):
+                pomK = True
+        except:
+            pomK = False
+
         person2.admin = pom
+        if pom & pomK:
+            person2.admin = True
+            person2.kierownik = False
+        else:
+            person2.admin = pom
+            person2.kierownik = pomK
 
     except (KeyError, Person):
         # Redisplay the question voting form.
@@ -200,9 +213,15 @@ def addPersonFormExecute(request):
         #pom = False
         try:
             if (request.POST['czyA']):
-                 pom = True
+                pom = True
         except:
             pom = False
+
+        try:
+            if (request.POST['czyK']):
+                pomK = True
+        except:
+            pomK = False
 
         person2 = Person()
         #person = Person(firstName=request.POST['fname'], lastName=request.POST['lname'], login = request.POST['login'], password=request.POST['password'], position=request.POST['position'], admin= pom)
@@ -211,8 +230,14 @@ def addPersonFormExecute(request):
         person2.lastName = request.POST['lname']
         person2.login = request.POST['login']
         person2.password = request.POST['password']
-        person2.position = request.POST['position']
-        person2.admin = pom
+        # person2.position = request.POST['position']
+        if pom & pomK:
+            person2.admin = True
+            person2.kierownik = False
+        else:
+            person2.admin = pom
+            person2.kierownik = pomK
+
 
         person2.save()
         return HttpResponseRedirect(reverse('polls:personList'))
@@ -266,6 +291,14 @@ def register(request):
                 user.set_password(user.password)
                 user.save()
                 profile = profile_form.save(commit=False)
+                if profile.admin & profile.kierownik:
+                    profile.admin = True
+                    profile.kierownik = False
+                date = datetime.now()
+                if date.month == 1:
+                    date.month = 13
+                    date.year -= 1
+                profile.position = "" + (datetime(date.year, date.month-1, 28)).strftime("%Y-%m") + " = Zatwierdzony"
                 profile.user = user
                 profile.save()
                 registered = True
@@ -373,7 +406,7 @@ def NotifikationForm(request):
                 # else :warunke= datetime.now().month.__str__()
                 if monthPom == datetime.now().strftime("%m"):
                     error="Ten miesiąc został już zamknięty"
-                elif pomCzyPrzeslanyDoZamkniecia==" = Zatwierdzony" & monthPom==datetime.now().strftime("%m"):
+                elif( pomCzyPrzeslanyDoZamkniecia ==" = Zatwierdzony") & (monthPom == datetime.now().strftime("%m")):
                     error = "Ten miesiąc został już zamknięty"
                 elif pomCzyPrzeslanyDoZamkniecia=="= Do zatwierdzenia":
                     error = "Ten miesiąc został już przesłany do zatwierdzenie nie można wykonać tej operacji"
@@ -566,21 +599,31 @@ def notifikationFormDeleteExecute(request):
         #                     })
         # el
         if(pom.kierownik):
+
+            if request.POST['typ'] == "user":
                 return render(request, 'polls/notifikationUser.html',
                               {'person': pom,
                                'notifikation': notifikationList,
                                'sumHouersInMonth': sumHouersInMonth.__round__(2),
                                'sumHouersInLastMonth': sumHouersInLastMonth.__round__(2)
                                })
+            return HttpResponseRedirect(reverse('polls:startpage'))
         else:
 
             if (pom.admin):
-                return render(request, 'polls/StartAdmin.html',
-                              {'person': pom,
-                               'notifikation': notifikationList,
-                               'sumHouersInMonth': sumHouersInMonth.__round__(2),
-                               'sumHouersInLastMonth': sumHouersInLastMonth.__round__(2)
-                               })
+                if request.POST['typ'] == "start":
+                    return render(request, 'polls/StartAdmin.html',
+                                  {'person': pom,
+                                   'notifikation': notifikationList,
+                                   'sumHouersInMonth': sumHouersInMonth.__round__(2),
+                                   'sumHouersInLastMonth': sumHouersInLastMonth.__round__(2)
+                                   })
+                else:
+                    tempalte = "polls/ProjectDetailAdmin.html"
+                    return render(request, tempalte,
+                              {'notifikation': Notification.objects.filter(projectOwner_id=request.POST['idP'][16]).order_by(
+                                  '-start_date'),
+                               'project': get_object_or_404(Project, idProject=request.POST['idP'][16])})
             else:
                 return render(request, 'polls/startUser.html',
                               {'person': pom,

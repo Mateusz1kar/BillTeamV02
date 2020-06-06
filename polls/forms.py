@@ -30,12 +30,13 @@ class TimeInput(forms.TimeInput):
     input_type = 'time'
 
 class UserProfileInfoForm(forms.ModelForm):
-    position = forms.CharField(max_length=30, required=False, help_text='Opcjonalnie')
-    admin = forms.BooleanField(required=False, )
+    # position = forms.CharField(max_length=30, required=False, help_text='Opcjonalnie')
+    admin = forms.BooleanField(required=False, help_text="")
+    kierownik = forms.BooleanField(required=False, )
 
     class Meta():
         model = Person
-        fields = ('position', 'admin')
+        fields = ( 'admin','kierownik')
 
 
 class NotificationAdd(forms.ModelForm):
