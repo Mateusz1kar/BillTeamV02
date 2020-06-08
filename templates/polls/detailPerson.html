@@ -31,7 +31,7 @@
 <form action="{% url 'polls:personDelee' %}" method="post">
 {% csrf_token %}
      <input type="text" id="id" name="id" style="display: none" value="{{ person.id }}">
-    <input type="submit" value="Usuń">
+    <input type="submit" value="Dezaktywuj">
 </form>
 <!--    <form action="{% url 'polls:notifikationUser' %}" method="post">-->
 <!--        {% csrf_token %}-->
