@@ -7,8 +7,10 @@ app_name = 'polls'
 
 urlpatterns = [
     path('',views.index,name='index'),
-    path('PersonList/', views.PersonList.as_view(), name='personList'),
-    path('DetailPerson/<int:pk>/', views.DetailPerson.as_view(), name='detailPerson'),
+    path('PersonList/', views.PersonList, name='personList'),
+    # path('PersonListK/', views.PersonListKieownik.as_view(), name='personListKierownik'),
+    path('DetailPerson/<int:pk>/', views.DetailPerson, name='detailPerson'),
+    # path('DetailPersonK/<int:pk>/', views.DetailPersonKierownik.as_view(), name='detailPersonKierownik'),
     # ex: /polls/5/results/
     path('DetailProject/<int:pk>/', views.DetailProject.as_view(), name='detailProject'),   #nie dzziała
     # ex: /polls/5/vote/
@@ -18,6 +20,10 @@ urlpatterns = [
     path('AddPersonFormExecute/', views.addPersonFormExecute, name='personAdd'),
 
     path('ProjectList/', views.ProjectList.as_view(), name='projectList'),
+    path('ProjectListK/', views.ProjectListKieronik.as_view(), name='projectListKierownik'),
+    path('ProjectListK/', views.ProjectListKieronik.as_view(), name='projectListKierownik'),
+    path('ProjektUsun/', views.ProjectDelExecute, name='projectDel'),
+    path('ProjektUsunK/', views.myProjectKierownikDel, name='projectDelK'),
 
     #url(r'^register/$', views.register, name='register'),
     #url(r'^login/$', auth_views.LoginView, name='login'),
@@ -35,7 +41,16 @@ urlpatterns = [
     path('ProjectAddAdmin/', views.projectadd, name='AddProjectAdmin'),
     path('Start/', views.SartPage, name='startpage'),
 
-    path('NotifikationProject/', views.NotifikationProject, name='notifikationProject')
+    path('NotifikationProject/', views.NotifikationProject, name='notifikationProject'),
+    path('Raport/', views.EndMonthRaport, name='raportMont'),
+    path('RaportProjekt/', views.EndMonthProjectRaport, name='raportProject'),
+
+    path('WyslijDoZatwierdzenia/', views.EndMonhRequest, name='endMontRequest'),
+    path('Zatwierdz/', views.EndMonth, name='endMonth'),
+    path('CofnijZatwierdzenie/', views.delEndMonhRequest, name='delEndMontReques'),
+
+    path('MojeProjekty/', views.ProjectUserOwner, name='ProjectOwned')
+
 ]
 
 

@@ -6,11 +6,13 @@
       {% if registered %}
         <h1>Rejestracja udana</h1>
       {% else %}
-        <h1>Zarejestruj</h1>
+        <h1>Zarejestruj pracownika</h1>
         <h3>Wypełnij formualarz</h3>
 <form enctype="multipart/form-data" action="{% url 'polls:register' %}" method="POST">
           {% csrf_token %}
           {{ user_form.as_p }}
+    <h3>Dodatkowe uprawnienia:</h3>
+    <p>wybranie obu przypisze uprawnienia administratora</p>
           {{ profile_form.as_p }}
           <input type="submit" name="" value="Zarejestruj">
         </form>

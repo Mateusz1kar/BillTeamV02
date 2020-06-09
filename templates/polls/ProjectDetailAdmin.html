@@ -1,4 +1,4 @@
-{% extends "polls/kierownik/baseKierownik.html" %}
+{% extends "polls//base.html" %}
 {#  load staticfiles %}#}
 {% block body_block %}
 
@@ -28,13 +28,14 @@
          <td>{{ n.start_date }}</td>
         <td>{{ n.edn_date }}</td>
 <!--        <td>-->
-<!--            <form action="{% url 'polls:notifikationDelee' %}" method="post">-->
+<!--            <form  enctype="multipart/form-data" action="{% url 'polls:notifikationDelee' %}" method="post">-->
 <!--        {% csrf_token %}-->
 <!--              <input type="text" id="typ" name="typ" style="display: none" value="projekt">-->
 <!--             <input type="number" id="id" name="id" style="display: none" value="{{ n.idNotification }}">-->
+<!--                  <input type="text" id="idP" name="idP" style="display: none" value="{{ n.projectOwner }}">-->
 <!--            <input type="submit" value="Usuń">-->
-<!--&lt;!&ndash;        </form></td>-->
-</tr>
+<!--        </form></td></tr>-->
+        </tr>
     {% endfor %}
 
 {% else %}

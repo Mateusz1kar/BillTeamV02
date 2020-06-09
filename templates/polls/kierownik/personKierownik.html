@@ -1,15 +1,14 @@
-{% extends "polls/base.html" %}
+{% extends "polls/kierownik/baseKierownik.html" %}
 {#  load staticfiles %}#}
 {% block body_block %}
 <table>
-
   <tr>
       <th>Id</th>
       <th>Imie</th>
       <th>Nazwisko</th>
       <th>Login</th>
       <th>Zatwierdzenie</th>
-      <th>Stanowiko</th>
+      <th>Admin</th>
       <th>Wyświetl</th>
   </tr>
 {#  admin, id, position, user, user_id #}
@@ -21,13 +20,7 @@
          <td>{{ p.user.last_name }}</td>
          <td>{{ p.user.username }}</td>
          <td>{{ p.position }}</td>
-        {% if p.admin%}
-         <td>Administrator</td>
-        {% elif p.kierownik%}
-        <td>Kierownik</td>
-        {% else%}
-        <td>Urzytkonik</td>
-        {% endif%}
+         <td>{{ p.admin }}</td>
         <td><a href="{% url 'polls:detailPerson'  p.id %}"><button class="show-person" value="Wyswietl">Wyswietl</button> </a></td></tr>
     {% endfor %}
 
@@ -35,6 +28,6 @@
     <p>No polls are available.</p>
 {% endif %}
 </table>
-<a href="{% url 'polls:register' %}" ><button class="add-person">Dodaj</button></a>
+
 
 {% endblock %}
